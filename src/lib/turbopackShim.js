@@ -24,11 +24,100 @@ import { factory69124 } from './modules/hemingPageModule';
 import { factory67730 } from './modules/librarySearchModule';
 import { factory80300 } from './modules/librarySearchPageModule';
 
+import { buildInterpretation, buildHemingAnalysis } from './interpretEngine';
+
+function createSseResponse(fullText) {
+  const encoder = new TextEncoder();
+  const chunks = fullText.match(/.{1,18}(\s|$)/gs) || [fullText];
+  const stream = new ReadableStream({
+    async start(controller) {
+      for (const piece of chunks) {
+        const payload = JSON.stringify({ delta: { text: piece } });
+        controller.enqueue(encoder.encode(`data: ${payload}\n\n`));
+        await new Promise((r) => setTimeout(r, 12));
+      }
+      controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+      controller.close();
+    },
+  });
+  return new Response(stream, {
+    status: 200,
+    headers: { 'Content-Type': 'text/event-stream; charset=utf-8' },
+  });
+}
+
+if (typeof window !== 'undefined' && !window.__hhdFetchPatched) {
+  window.__hhdFetchPatched = true;
+  const origFetch = window.fetch.bind(window);
+  window.fetch = async (input, init) => {
+    const url = typeof input === 'string' ? input : input?.url || '';
+    if (url.endsWith('/api/interpret') || url.endsWith('/api/heming')) {
+      try {
+        const res = await origFetch(input, init);
+        if (res.ok) return res;
+      } catch {}
+      try {
+        const body = JSON.parse(init?.body || '{}');
+        if (url.endsWith('/api/interpret')) {
+          const lastUserMsg =
+            [...(body.messages || [])].reverse().find((m) => m.role === 'user')?.content ||
+            '[TOPIC:overview]';
+          return createSseResponse(buildInterpretation(body.chart, lastUserMsg));
+        } else {
+          return createSseResponse(buildHemingAnalysis(body.chartA, body.chartB, body.question));
+        }
+      } catch (err) {
+        return createSseResponse(`**【Định điệu cốt lõi】**\nHệ thống HHD đang xử lý dữ liệu lá số.`);
+      }
+    }
+    return origFetch(input, init);
+  };
+}
+
+const BasePathLink = React.forwardRef(function BasePathLink(props, ref) {
+  let { href, ...rest } = props;
+  if (
+    typeof window !== 'undefined' &&
+    typeof href === 'string' &&
+    href.startsWith('/') &&
+    !href.startsWith('/tuvi-hhd') &&
+    window.location.pathname.startsWith('/tuvi-hhd')
+  ) {
+    href = `/tuvi-hhd${href === '/' ? '' : href}`;
+  }
+  return <Link ref={ref} href={href} {...rest} />;
+});
+
+const PatchedNavigation = {
+  ...NextNavigation,
+  useRouter() {
+    const router = NextNavigation.useRouter();
+    return React.useMemo(
+      () => ({
+        ...router,
+        push(href, options) {
+          if (
+            typeof window !== 'undefined' &&
+            typeof href === 'string' &&
+            href.startsWith('/') &&
+            !href.startsWith('/tuvi-hhd') &&
+            window.location.pathname.startsWith('/tuvi-hhd')
+          ) {
+            return router.push(`/tuvi-hhd${href === '/' ? '' : href}`, options);
+          }
+          return router.push(href, options);
+        },
+      }),
+      [router]
+    );
+  },
+};
+
 const registry = {
   43476: jsxRuntime,
   71645: React,
-  18566: NextNavigation,
-  22016: { default: Link },
+  18566: PatchedNavigation,
+  22016: { default: BasePathLink },
   46932: {
     f: motion,
     useReducedMotion,

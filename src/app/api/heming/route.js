@@ -38,7 +38,7 @@ function getPalaceMajorStars(chart, palaceNameZh) {
   };
 }
 
-function buildHemingAnalysis(chartA, chartB, question) {
+export function buildHemingAnalysis(chartA, chartB, question) {
   const nameA = chartA?.birthInfo?.name || 'Đương số Giáp';
   const nameB = chartB?.birthInfo?.name || 'Đương số Ất';
 

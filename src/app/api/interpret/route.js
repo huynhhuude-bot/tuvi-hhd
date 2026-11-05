@@ -128,7 +128,7 @@ function detectTopicFromText(msg) {
   return { mode: 'question', key: 'mingGong', question: msg };
 }
 
-function buildInterpretation(chart, userMsg) {
+export function buildInterpretation(chart, userMsg) {
   const palaces = chart?.palaces || [];
   const parsed = detectTopicFromText(userMsg || '[TOPIC:overview]');
 
