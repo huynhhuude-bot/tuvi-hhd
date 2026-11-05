@@ -3,7 +3,49 @@
 import Link from 'next/link';
 import { HomePage } from '../lib/turbopackShim';
 
-const SIX_METAPHYSICS_CARDS = [
+const TWELVE_METAPHYSICS_CARDS = [
+  {
+    href: '/sim-phong-thuy',
+    icon: '📱',
+    tag: 'Bát Cực Linh Số · 64 Quẻ Dịch',
+    title: 'Chấm Điểm Sim, Biển Số Xe & STK',
+    desc: 'Phân tích số điện thoại (VD: 0983.339.397), biển số xe 5 số và số tài khoản ngân hàng theo Âm Dương, Ngũ Hành Bản Mệnh, Quẻ Dịch & Bát Cực Linh Số.'
+  },
+  {
+    href: '/thuoc-lo-ban',
+    icon: '📏',
+    tag: '52.2cm · 42.9cm · 38.8cm',
+    title: 'Thước Lỗ Ban 3 Chuẩn Trực Tuyến',
+    desc: 'Đo kích thước Đỏ (Đại Cát) thông thủy, dương trạch và đồ thờ cho cửa chính, bàn làm việc, bàn thờ và biển hiệu quảng cáo K94 Media.'
+  },
+  {
+    href: '/sao-han',
+    icon: '🏮',
+    tag: 'Cửu Diệu · Tam Tai · Văn Khấn',
+    title: 'Xem Sao Hạn, Tuổi Làm Nhà & Văn Khấn',
+    desc: 'Tra cứu Sao Chiếu Mệnh Cửu Diệu, Hạn Niên, kiểm tra Tam Tai - Kim Lâu - Hoang Ốc và tạo bài Văn Khấn Cúng Sao, Khai Trương chuẩn cổ truyền.'
+  },
+  {
+    href: '/hop-tuoi',
+    icon: '🤝',
+    tag: 'Tam Hợp · Ngũ Hành · Cung Phi',
+    title: 'Xem Tuổi Hợp Làm Ăn & Xông Đất',
+    desc: 'Đối chiếu 4 tầng Ngũ Hành Nạp Âm, Thiên Can, Địa Chi, Cung Phi giữa Gia chủ và Đối tác kinh doanh, lọc Top 6 tuổi mở hàng đại cát.'
+  },
+  {
+    href: '/nhan-tuong',
+    icon: '✋',
+    tag: 'Ma Y Thần Tướng · Thủ Tướng',
+    title: 'Nhân Tướng Học & Xem Chỉ Tay',
+    desc: 'Luận giải tướng mặt Tam Đình Ngũ Quan (Trán, Mắt, Mũi, Miệng, Tai) và sơ đồ bàn tay tương tác 5 đường chỉ tay chính (Tâm, Trí, Sinh, Sự Nghiệp, Tài Vận).'
+  },
+  {
+    href: '/the-ho-menh',
+    icon: '🪪',
+    tag: 'Phật Bản Mệnh · Chuông Thiền Hz',
+    title: 'Kim Bài Hộ Mệnh K94 & Thiền Âm',
+    desc: 'Tra cứu Phật Bản Mệnh 12 con giáp, xuất ảnh Kim Bài Hộ Mệnh Phong Thủy PNG cài hình nền điện thoại và thỉnh chuông thiền tần số Ngũ Hành.'
+  },
   {
     href: '/divination',
     icon: '☯',
@@ -15,7 +57,7 @@ const SIX_METAPHYSICS_CARDS = [
     href: '/calligraphy',
     icon: '🖌',
     tag: 'Thư Pháp Khai Bút · Xuất Tranh PNG',
-    title: 'Xin Chữ Ông Đồ HHD',
+    title: 'Xin Chữ Ông Đồ HHD · K94',
     desc: 'Chọn sở cầu (Tài Lộc, Công Danh, Gia Đạo, Trí Tuệ), nhận đại tự Hán–Việt hợp Ngũ Hành, câu đối cổ và tải bức trướng thư pháp đỏ viền kim.'
   },
   {
@@ -50,18 +92,18 @@ const SIX_METAPHYSICS_CARDS = [
 
 export default function Page() {
   return (
-    <div style={{ paddingBottom: 72 }}>
+    <div style={{ paddingBottom: 32 }}>
       <HomePage />
 
-      {/* Section showcasing the 6 new Eastern Metaphysics & Cultural Features */}
+      {/* Section showcasing all 12 Eastern Metaphysics & Cultural Features */}
       <section
         style={{
           background: 'linear-gradient(180deg, #0B0C10 0%, #11131C 100%)',
           borderTop: '1px solid rgba(201,168,76,0.25)',
-          padding: '64px 20px 80px'
+          padding: '64px 20px 64px'
         }}
       >
-        <div style={{ maxWidth: 1120, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1140, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 40 }}>
             <div
               style={{
@@ -72,7 +114,7 @@ export default function Page() {
                 background: 'rgba(201,168,76,0.1)',
                 color: '#c9a84c',
                 fontSize: 12,
-                letterSpacing: 1.8,
+                letterSpacing: 1.5,
                 textTransform: 'uppercase',
                 marginBottom: 12
               }}
@@ -87,21 +129,21 @@ export default function Page() {
                 margin: '0 0 10px 0'
               }}
             >
-              Lục Đại Pháp Khí · Bói Quẻ, Xin Chữ & Phong Thủy Cát Tường
+              Thập Nhị Đại Pháp Khí · Phong Thủy, Bói Quẻ, Sim Số & Văn Khấn HHD
             </h2>
-            <p style={{ color: '#9DA3B4', maxWidth: 680, margin: '0 auto', fontSize: 15, lineHeight: 1.6 }}>
-              Bên cạnh Lá Số Tử Vi Đẩu Số Chính Tông, hệ thống HHD tích hợp trọn bộ 6 pháp khí huyền học cổ truyền giúp bạn chiêm bốc thời vận, xin chữ khai xuân và định hướng phong thủy.
+            <p style={{ color: '#9DA3B4', maxWidth: 720, margin: '0 auto', fontSize: 15, lineHeight: 1.6 }}>
+              Hệ sinh thái 12 công cụ huyền học phương Đông miễn phí 100% do <strong>Công ty Truyền thông K94 (Hotline/Zalo: 0983.339.397)</strong> phát triển, giúp bạn chấm điểm Sim/Biển số, đo Thước Lỗ Ban, xem Sao Hạn, Hợp Tuổi Làm Ăn, Gieo Quẻ Dịch và Xin Chữ Ông Đồ.
             </p>
           </div>
 
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))',
               gap: 20
             }}
           >
-            {SIX_METAPHYSICS_CARDS.map((card) => (
+            {TWELVE_METAPHYSICS_CARDS.map((card) => (
               <Link
                 key={card.href}
                 href={card.href}

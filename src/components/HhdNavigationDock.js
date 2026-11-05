@@ -11,7 +11,55 @@ const HHD_FEATURES = [
     shortLabel: 'Lá Số Tử Vi',
     title: 'Tử Vi Đẩu Số HHD',
     subtitle: 'Lập lá số Chân Thái Dương Thời, AI Luận Giải 4 tầng & Hợp Hôn',
-    badge: 'Miễn Phí'
+    badge: 'Chính Tông'
+  },
+  {
+    href: '/sim-phong-thuy',
+    icon: '📱',
+    shortLabel: 'Chấm Điểm Sim',
+    title: 'Chấm Điểm Sim & Biển Số Xe',
+    subtitle: 'Phân tích Bát Cực Linh Số, 64 Quẻ Dịch, Ngũ Hành Sim, Biển số & STK',
+    badge: 'Mới · Hot'
+  },
+  {
+    href: '/thuoc-lo-ban',
+    icon: '📏',
+    shortLabel: 'Thước Lỗ Ban',
+    title: 'Thước Lỗ Ban 3 Chuẩn',
+    subtitle: 'Đo kích thước Đỏ (Đại Cát) 52.2cm, 42.9cm, 38.8cm cho cửa, bàn thờ, biển hiệu',
+    badge: '3 Thước'
+  },
+  {
+    href: '/sao-han',
+    icon: '🏮',
+    shortLabel: 'Sao Hạn & Văn Khấn',
+    title: 'Sao Hạn Cửu Diệu & Văn Khấn',
+    subtitle: 'Xem Sao Chiếu Mệnh, Tam Tai, Kim Lâu, Hoang Ốc & Văn Khấn Cổ Truyền',
+    badge: 'Giải Hạn'
+  },
+  {
+    href: '/hop-tuoi',
+    icon: '🤝',
+    shortLabel: 'Hợp Tuổi Làm Ăn',
+    title: 'Hợp Tuổi Làm Ăn & Xông Đất',
+    subtitle: 'Chấm điểm đối tác kinh doanh, người mở hàng khai trương & xông đất',
+    badge: 'Kinh Doanh'
+  },
+  {
+    href: '/nhan-tuong',
+    icon: '✋',
+    shortLabel: 'Nhân Tướng & Chỉ Tay',
+    title: 'Nhân Tướng Học & Chỉ Tay',
+    subtitle: 'Xem tướng mặt Tam Đình Ngũ Quan (Ma Y Thần Tướng) & 5 đường chỉ tay',
+    badge: 'Tướng Pháp'
+  },
+  {
+    href: '/the-ho-menh',
+    icon: '🪪',
+    shortLabel: 'Kim Bài Hộ Mệnh',
+    title: 'Kim Bài Hộ Mệnh & Chuông Thiền',
+    subtitle: 'Tạo thẻ Phật Bản Mệnh K94 tải PNG & Chuông thiền tần số Ngũ Hành',
+    badge: 'VIP Card'
   },
   {
     href: '/divination',
@@ -102,7 +150,7 @@ export default function HhdNavigationDock() {
           </div>
 
           <div style={{ fontSize: 18, fontWeight: 700, color: '#F4E3B2', marginBottom: 6 }}>
-            Hệ Thống Tử Vi & Huyền Học HHD — Công ty Truyền thông K94
+            Hệ Thống Tử Vi & 12 Pháp Khí Huyền Học HHD — Công ty Truyền thông K94
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
@@ -141,7 +189,7 @@ export default function HhdNavigationDock() {
         </div>
       </div>
 
-      {/* Modal Drawer showcasing all HHD Metaphysics Features */}
+      {/* Modal Drawer showcasing all 12+ HHD Metaphysics Features */}
       {drawerOpen && (
         <div
           onClick={() => setDrawerOpen(false)}
@@ -149,7 +197,7 @@ export default function HhdNavigationDock() {
             position: 'fixed',
             inset: 0,
             zIndex: 9998,
-            background: 'rgba(6, 7, 11, 0.82)',
+            background: 'rgba(6, 7, 11, 0.84)',
             backdropFilter: 'blur(10px)',
             display: 'flex',
             alignItems: 'center',
@@ -161,7 +209,7 @@ export default function HhdNavigationDock() {
             onClick={(e) => e.stopPropagation()}
             style={{
               width: '100%',
-              maxWidth: 920,
+              maxWidth: 1040,
               maxHeight: '88vh',
               overflowY: 'auto',
               background: 'linear-gradient(160deg, #161822, #0D0F16)',
@@ -178,7 +226,7 @@ export default function HhdNavigationDock() {
                   CÔNG TY TRUYỀN THÔNG K94 · HOTLINE: 0983.339.397 · MIỄN PHÍ 100%
                 </div>
                 <h2 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 26, color: '#F4E3B2', margin: '4px 0 0 0' }}>
-                  Trọn Bộ Pháp Khí Phong Thủy & Bói Toán HHD
+                  Trọn Bộ 12 Pháp Khí Phong Thủy, Tử Vi & Bói Toán HHD
                 </h2>
               </div>
               <button
@@ -198,7 +246,7 @@ export default function HhdNavigationDock() {
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 12 }}>
               {HHD_FEATURES.map((item) => {
                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                 return (
@@ -208,32 +256,31 @@ export default function HhdNavigationDock() {
                     onClick={() => setDrawerOpen(false)}
                     style={{
                       textDecoration: 'none',
-                      padding: 18,
+                      padding: 16,
                       borderRadius: 16,
                       border: isActive ? '1px solid #c9a84c' : '1px solid rgba(201,168,76,0.22)',
                       background: isActive ? 'rgba(201,168,76,0.16)' : 'rgba(255,255,255,0.03)',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      gap: 10,
-                      transition: 'all 0.2s ease'
+                      gap: 8
                     }}
                   >
                     <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                        <span style={{ fontSize: 28 }}>{item.icon}</span>
-                        <span style={{ fontSize: 11, padding: '2px 9px', borderRadius: 99, background: 'rgba(201,168,76,0.2)', color: '#c9a84c', fontWeight: 700 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                        <span style={{ fontSize: 24 }}>{item.icon}</span>
+                        <span style={{ fontSize: 10.5, padding: '2px 8px', borderRadius: 99, background: 'rgba(201,168,76,0.2)', color: '#c9a84c', fontWeight: 700 }}>
                           {item.badge}
                         </span>
                       </div>
-                      <div style={{ fontWeight: 700, fontSize: 16, color: '#F4E3B2', marginBottom: 4 }}>
+                      <div style={{ fontWeight: 700, fontSize: 15, color: '#F4E3B2', marginBottom: 4 }}>
                         {item.title}
                       </div>
-                      <div style={{ fontSize: 12.5, color: '#9DA3B4', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: 12, color: '#9DA3B4', lineHeight: 1.45 }}>
                         {item.subtitle}
                       </div>
                     </div>
-                    <div style={{ fontSize: 12, color: '#c9a84c', fontWeight: 600 }}>
+                    <div style={{ fontSize: 11.5, color: '#c9a84c', fontWeight: 700 }}>
                       Mở tính năng →
                     </div>
                   </Link>
@@ -265,6 +312,27 @@ export default function HhdNavigationDock() {
           overflowX: 'auto'
         }}
       >
+        <button
+          onClick={() => setDrawerOpen((v) => !v)}
+          title="Mở bảng toàn bộ 12 tính năng Huyền Học HHD"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5,
+            padding: '7px 12px',
+            borderRadius: 999,
+            border: '1px solid #c9a84c',
+            background: 'rgba(201,168,76,0.22)',
+            color: '#F4E3B2',
+            fontSize: 12,
+            fontWeight: 800,
+            whiteSpace: 'nowrap',
+            cursor: 'pointer'
+          }}
+        >
+          <span>✨ 12 Tính Năng</span>
+        </button>
+
         {HHD_FEATURES.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
           return (
@@ -274,19 +342,18 @@ export default function HhdNavigationDock() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 6,
-                padding: '7px 11px',
+                gap: 5,
+                padding: '7px 10px',
                 borderRadius: 999,
                 textDecoration: 'none',
                 whiteSpace: 'nowrap',
-                fontSize: 12,
+                fontSize: 11.5,
                 fontWeight: isActive ? 700 : 500,
                 color: isActive ? '#0B0C10' : '#E8D5A3',
-                background: isActive ? 'linear-gradient(135deg, #e0c168, #c9a84c)' : 'transparent',
-                transition: 'all 0.18s ease'
+                background: isActive ? 'linear-gradient(135deg, #e0c168, #c9a84c)' : 'transparent'
               }}
             >
-              <span style={{ fontSize: 13.5 }}>{item.icon}</span>
+              <span style={{ fontSize: 13 }}>{item.icon}</span>
               <span>{item.shortLabel}</span>
             </Link>
           );
@@ -312,27 +379,6 @@ export default function HhdNavigationDock() {
         >
           <span>📞 K94: 0983.339.397</span>
         </a>
-
-        <button
-          onClick={() => setDrawerOpen((v) => !v)}
-          title="Mở bảng toàn bộ tính năng Huyền Học HHD"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 5,
-            padding: '7px 11px',
-            borderRadius: 999,
-            border: '1px solid rgba(201,168,76,0.45)',
-            background: 'rgba(201,168,76,0.16)',
-            color: '#F4E3B2',
-            fontSize: 12,
-            fontWeight: 700,
-            whiteSpace: 'nowrap',
-            cursor: 'pointer'
-          }}
-        >
-          <span>✨ Menu</span>
-        </button>
       </div>
     </>
   );
