@@ -19,13 +19,6 @@ const TWELVE_METAPHYSICS_CARDS = [
     desc: 'Tính trọng lượng xương cốt (mấy lượng mấy chỉ) theo đại sư Viên Thiên Cang, lập Tứ Trụ 8 chữ Can Chi và tìm hành bị khuyết để bổ sung Dụng Thần.'
   },
   {
-    href: '/phong-thuy-thuong-hieu',
-    icon: '🎨',
-    tag: 'Màu Logo · Biển Hiệu · B2B K94 Media',
-    title: 'Phong Thủy Thương Hiệu, Logo & Biển Hiệu',
-    desc: 'Tư vấn màu sắc nhận diện thương hiệu, hình khối thiết kế Logo, mô phỏng biển hiệu quảng cáo tương sinh và gợi ý ngành nghề kinh doanh đại vượng.'
-  },
-  {
     href: '/phong-thuy-ban-lam-viec',
     icon: '🪴',
     tag: 'Cửu Cung Bát Quái · Cây Cảnh Hợp Mệnh',
@@ -154,8 +147,9 @@ export default function Page() {
       {/* Section showcasing all 12 Eastern Metaphysics & Cultural Features */}
       <section
         style={{
-          background: 'linear-gradient(180deg, #0B0C10 0%, #11131C 100%)',
-          borderTop: '1px solid rgba(201,168,76,0.25)',
+          background:
+            'radial-gradient(ellipse at 50% 0%, rgba(139, 92, 246, 0.18) 0%, transparent 70%), linear-gradient(180deg, #131936 0%, #192145 100%)',
+          borderTop: '1px solid rgba(245, 200, 76, 0.35)',
           padding: '64px 20px 64px'
         }}
       >
@@ -166,9 +160,9 @@ export default function Page() {
                 display: 'inline-block',
                 padding: '5px 16px',
                 borderRadius: 999,
-                border: '1px solid rgba(201,168,76,0.4)',
-                background: 'rgba(201,168,76,0.1)',
-                color: '#c9a84c',
+                border: '1px solid rgba(245, 200, 76, 0.5)',
+                background: 'rgba(139, 92, 246, 0.18)',
+                color: '#FDE68A',
                 fontSize: 12,
                 letterSpacing: 1.5,
                 textTransform: 'uppercase',
@@ -181,14 +175,14 @@ export default function Page() {
               style={{
                 fontFamily: 'var(--font-serif, serif)',
                 fontSize: 'clamp(26px, 3.6vw, 38px)',
-                color: '#F4E3B2',
+                color: '#FFF8E5',
                 margin: '0 0 10px 0'
               }}
             >
               Thập Nhị Đại Pháp Khí · Phong Thủy, Bói Quẻ, Sim Số & Văn Khấn HHD
             </h2>
-            <p style={{ color: '#9DA3B4', maxWidth: 720, margin: '0 auto', fontSize: 15, lineHeight: 1.6 }}>
-              Hệ sinh thái 12 công cụ huyền học phương Đông miễn phí 100% do <strong>Công ty Truyền thông K94 (Hotline/Zalo: 0983.339.397)</strong> phát triển, giúp bạn chấm điểm Sim/Biển số, đo Thước Lỗ Ban, xem Sao Hạn, Hợp Tuổi Làm Ăn, Gieo Quẻ Dịch và Xin Chữ Ông Đồ.
+            <p style={{ color: '#D0DCF2', maxWidth: 720, margin: '0 auto', fontSize: 15, lineHeight: 1.6 }}>
+              Hệ sinh thái các công cụ huyền học phương Đông miễn phí 100% do <strong>Công ty Truyền thông K94 (Hotline/Zalo: 0983.339.397)</strong> phát triển, giúp bạn chấm điểm Sim/Biển số, đo Thước Lỗ Ban, xem Sao Hạn, Hợp Tuổi Làm Ăn, Gieo Quẻ Dịch và Xin Chữ Ông Đồ.
             </p>
           </div>
 
@@ -205,15 +199,15 @@ export default function Page() {
                 href={card.href}
                 style={{
                   textDecoration: 'none',
-                  background: 'rgba(20, 22, 32, 0.88)',
-                  border: '1px solid rgba(201, 168, 76, 0.28)',
+                  background: 'linear-gradient(160deg, rgba(31, 41, 82, 0.9) 0%, rgba(21, 28, 58, 0.94) 100%)',
+                  border: '1px solid rgba(245, 200, 76, 0.36)',
                   borderRadius: 20,
                   padding: 24,
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   gap: 14,
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.35)'
+                  boxShadow: '0 10px 30px rgba(8, 12, 30, 0.45), 0 0 18px rgba(139, 92, 246, 0.14)'
                 }}
               >
                 <div>
@@ -223,8 +217,8 @@ export default function Page() {
                         width: 48,
                         height: 48,
                         borderRadius: 12,
-                        background: 'rgba(201,168,76,0.14)',
-                        border: '1px solid rgba(201,168,76,0.35)',
+                        background: 'rgba(139, 92, 246, 0.2)',
+                        border: '1px solid rgba(245, 200, 76, 0.45)',
                         display: 'inline-flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -236,8 +230,8 @@ export default function Page() {
                     <span
                       style={{
                         fontSize: 11,
-                        color: '#c9a84c',
-                        background: 'rgba(201,168,76,0.12)',
+                        color: '#FDE68A',
+                        background: 'rgba(245, 200, 76, 0.16)',
                         padding: '4px 10px',
                         borderRadius: 999,
                         fontWeight: 600
@@ -250,13 +244,13 @@ export default function Page() {
                     style={{
                       fontFamily: 'var(--font-serif, serif)',
                       fontSize: 20,
-                      color: '#F4E3B2',
+                      color: '#FFF8E5',
                       margin: '0 0 8px 0'
                     }}
                   >
                     {card.title}
                   </h3>
-                  <p style={{ fontSize: 13.5, color: '#A3A8B8', margin: 0, lineHeight: 1.6 }}>
+                  <p style={{ fontSize: 13.5, color: '#D0DCF2', margin: 0, lineHeight: 1.6 }}>
                     {card.desc}
                   </p>
                 </div>
@@ -266,7 +260,7 @@ export default function Page() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: 6,
-                    color: '#c9a84c',
+                    color: '#F5C84C',
                     fontSize: 13,
                     fontWeight: 700,
                     marginTop: 4

@@ -8,11 +8,6 @@ import {
   loadMonetizationConfig,
   isAdminAuthenticated
 } from '../data/monetizationData';
-import {
-  getSavedHhdThemeId,
-  getHhdThemeById,
-  applyHhdTheme
-} from '../data/themeData';
 
 export default function HhdSideAdLayout({ children }) {
   const rawPathname = usePathname() || '/';
@@ -24,32 +19,19 @@ export default function HhdSideAdLayout({ children }) {
   const [config, setConfig] = useState(DEFAULT_MONETIZATION_CONFIG);
   const [isAdmin, setIsAdmin] = useState(false);
   const [panelsCollapsed, setPanelsCollapsed] = useState(false);
-  const [themeId, setThemeId] = useState('huyen-vu');
 
   useEffect(() => {
     setConfig(loadMonetizationConfig());
     setIsAdmin(isAdminAuthenticated());
-    const initialTheme = getSavedHhdThemeId();
-    setThemeId(initialTheme);
-    applyHhdTheme(initialTheme);
-
     const onUpdate = () => setConfig(loadMonetizationConfig());
     const onAuth = () => setIsAdmin(isAdminAuthenticated());
-    const onTheme = (e) => {
-      const nextId = e?.detail || getSavedHhdThemeId();
-      setThemeId(nextId);
-    };
     window.addEventListener('hhd-monetization-updated', onUpdate);
     window.addEventListener('hhd-admin-auth-changed', onAuth);
-    window.addEventListener('hhd-theme-changed', onTheme);
     return () => {
       window.removeEventListener('hhd-monetization-updated', onUpdate);
       window.removeEventListener('hhd-admin-auth-changed', onAuth);
-      window.removeEventListener('hhd-theme-changed', onTheme);
     };
   }, []);
-
-  const activeTheme = getHhdThemeById(themeId);
 
   // Do not show side ad panels on the Admin security page itself
   if (pathname === '/quan-ly-kiem-tien') {
@@ -78,14 +60,14 @@ export default function HhdSideAdLayout({ children }) {
         key={slot.id}
         style={{
           background: slot.isRentalSlot
-            ? 'linear-gradient(160deg, rgba(201,168,76,0.14) 0%, rgba(15,17,26,0.96) 100%)'
-            : 'rgba(17, 19, 28, 0.94)',
+            ? 'linear-gradient(160deg, rgba(245, 200, 76, 0.16) 0%, rgba(25, 33, 68, 0.95) 100%)'
+            : 'linear-gradient(165deg, rgba(30, 39, 76, 0.94) 0%, rgba(20, 26, 54, 0.96) 100%)',
           border: slot.isRentalSlot
-            ? '1.5px dashed rgba(201, 168, 76, 0.65)'
-            : '1px solid rgba(201, 168, 76, 0.3)',
+            ? '1.5px dashed rgba(245, 200, 76, 0.7)'
+            : '1px solid rgba(245, 200, 76, 0.38)',
           borderRadius: 16,
           padding: 14,
-          boxShadow: '0 10px 28px rgba(0, 0, 0, 0.45)',
+          boxShadow: '0 10px 28px rgba(8, 12, 30, 0.45), 0 0 16px rgba(139, 92, 246, 0.14)',
           display: 'flex',
           flexDirection: 'column',
           gap: 9
@@ -151,7 +133,7 @@ export default function HhdSideAdLayout({ children }) {
             fontFamily: 'var(--font-serif, serif)',
             fontWeight: 700,
             fontSize: 14,
-            color: '#F4E3B2',
+            color: '#FFF8E5',
             lineHeight: 1.38,
             textDecoration: 'none'
           }}
@@ -159,7 +141,7 @@ export default function HhdSideAdLayout({ children }) {
           {slot.title}
         </CardLinkWrapper>
 
-        <div style={{ fontSize: 11.5, color: '#9DA3B4', lineHeight: 1.48 }}>
+        <div style={{ fontSize: 11.5, color: '#D0DCF2', lineHeight: 1.48 }}>
           {slot.desc}
         </div>
 
@@ -241,64 +223,44 @@ export default function HhdSideAdLayout({ children }) {
   };
 
   return (
-    <div style={{ background: activeTheme.shellBg, minHeight: '100vh', position: 'relative', transition: 'background 0.25s ease' }}>
+    <div
+      style={{
+        background:
+          'radial-gradient(ellipse at 50% 0%, rgba(124, 58, 237, 0.22) 0%, rgba(56, 189, 248, 0.12) 45%, transparent 75%), linear-gradient(180deg, #11162E 0%, #171E3C 50%, #10152B 100%)',
+        minHeight: '100vh',
+        position: 'relative'
+      }}
+    >
       <style>{`
         /* ============================================================== */
-        /* 4 BẢNG MÀU GIAO DIỆN PHONG THỦY HHD (CHU SA / GIẤY DÓ / NGỌC)  */
+        /* BẢNG MÀU TINH VÂN HUYỀN KHÔNG — DỄ NHÌN, RÕ CHỮ & HUYỀN BÍ     */
         /* ============================================================== */
-        html[data-hhd-theme="chu-sa"] {
-          --bg-0: #1A0707 !important;
-          --bg-1: #280C0C !important;
-          --bg-2: #3A1212 !important;
-          --bg-card: rgba(58, 16, 16, 0.72) !important;
-          --bg-page: #1A0707 !important;
-          --tx-0: #FFF3D1 !important;
-          --tx-1: #FCE8C5 !important;
-          --tx-2: #E2B8A8 !important;
-          --ac: #FFD54F !important;
-          --ac-dim: #FF8A65 !important;
+        :root,
+        html[data-theme="dark"] {
+          --bg-0: #121832 !important;
+          --bg-1: #192142 !important;
+          --bg-2: #232D58 !important;
+          --bg-card: rgba(30, 39, 74, 0.88) !important;
+          --bg-page: #121832 !important;
+          --tx-0: #FFF8E5 !important;
+          --tx-1: #F2F6FD !important;
+          --tx-2: #D0DCF2 !important;
+          --tx-3: #A3B5D9 !important;
+          --ac: #F5C84C !important;
+          --ac-dim: #FFE07D !important;
+          --ac-bg: rgba(245, 200, 76, 0.16) !important;
+          --ac-bdr: rgba(245, 200, 76, 0.45) !important;
+          --bdr: rgba(245, 200, 76, 0.24) !important;
+          --bdr-med: rgba(245, 200, 76, 0.38) !important;
+          --bdr-heavy: rgba(245, 200, 76, 0.55) !important;
         }
-        html[data-hhd-theme="chu-sa"] .hhd-center-stage > div,
-        html[data-hhd-theme="chu-sa"] .hhd-center-stage section {
-          background-color: #1C0808 !important;
-          background-image: radial-gradient(circle at 50% 0%, rgba(229, 57, 53, 0.2), transparent 65%), linear-gradient(180deg, #1E0808 0%, #140505 100%) !important;
+        body {
+          background: radial-gradient(ellipse at 50% 0%, rgba(139, 92, 246, 0.22) 0%, rgba(30, 64, 175, 0.15) 45%, transparent 75%), #121832 !important;
+          color: #F2F6FD !important;
         }
-
-        html[data-hhd-theme="ngoc-bich"] {
-          --bg-0: #051714 !important;
-          --bg-1: #0A2620 !important;
-          --bg-2: #113830 !important;
-          --bg-card: rgba(16, 54, 46, 0.72) !important;
-          --bg-page: #051714 !important;
-          --tx-0: #E8F5E9 !important;
-          --tx-1: #D4EDE2 !important;
-          --tx-2: #9AC4B5 !important;
-          --ac: #E0C168 !important;
-          --ac-dim: #4DB6AC !important;
+        .hhd-center-stage > div {
+          background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.22) 0%, rgba(245, 200, 76, 0.08) 40%, transparent 70%), linear-gradient(180deg, #131936 0%, #192246 50%, #111730 100%) !important;
         }
-        html[data-hhd-theme="ngoc-bich"] .hhd-center-stage > div,
-        html[data-hhd-theme="ngoc-bich"] .hhd-center-stage section {
-          background-color: #061815 !important;
-          background-image: radial-gradient(circle at 50% 0%, rgba(77, 182, 172, 0.18), transparent 65%), linear-gradient(180deg, #071D19 0%, #04110E 100%) !important;
-        }
-
-        html[data-hhd-theme="giay-do"] {
-          --bg-0: #F7F0DF !important;
-          --bg-1: #EFE5CC !important;
-          --bg-2: #E4D6B5 !important;
-          --bg-card: #FFFDF7 !important;
-          --bg-page: #F7F0DF !important;
-          --tx-0: #1F150E !important;
-          --tx-1: #2E2118 !important;
-          --tx-2: #5C4636 !important;
-          --tx-3: #846A56 !important;
-          --ac: #B71C1C !important;
-          --ac-dim: #8D6E63 !important;
-        }
-        html[data-hhd-theme="giay-do"] .hhd-center-stage > div {
-          filter: sepia(0.08);
-        }
-
         .hhd-3col-shell {
           display: flex;
           align-items: flex-start;
@@ -320,13 +282,13 @@ export default function HhdSideAdLayout({ children }) {
           gap: 12px;
           z-index: 20;
           scrollbar-width: thin;
-          scrollbar-color: rgba(201,168,76,0.35) transparent;
+          scrollbar-color: rgba(245,200,76,0.4) transparent;
         }
         .hhd-side-wing::-webkit-scrollbar {
           width: 4px;
         }
         .hhd-side-wing::-webkit-scrollbar-thumb {
-          background: rgba(201,168,76,0.35);
+          background: rgba(245,200,76,0.4);
           border-radius: 4px;
         }
         .hhd-center-stage {
@@ -343,8 +305,8 @@ export default function HhdSideAdLayout({ children }) {
           .hhd-mobile-ad-wings {
             display: block;
             padding: 20px 16px 10px;
-            background: ${activeTheme.shellBg};
-            border-top: 1px solid rgba(201,168,76,0.25);
+            background: #121832;
+            border-top: 1px solid rgba(245,200,76,0.3);
           }
         }
       `}</style>
@@ -381,8 +343,8 @@ export default function HhdSideAdLayout({ children }) {
           <aside
             className="hhd-side-wing"
             style={{
-              borderRight: '1px solid rgba(201, 168, 76, 0.22)',
-              background: activeTheme.wingBg
+              borderRight: '1px solid rgba(245, 200, 76, 0.26)',
+              background: 'linear-gradient(180deg, rgba(20, 26, 54, 0.96) 0%, rgba(14, 19, 40, 0.98) 100%)'
             }}
           >
             <div
@@ -471,8 +433,8 @@ export default function HhdSideAdLayout({ children }) {
           <aside
             className="hhd-side-wing"
             style={{
-              borderLeft: '1px solid rgba(201, 168, 76, 0.22)',
-              background: activeTheme.wingBg
+              borderLeft: '1px solid rgba(245, 200, 76, 0.26)',
+              background: 'linear-gradient(180deg, rgba(20, 26, 54, 0.96) 0%, rgba(14, 19, 40, 0.98) 100%)'
             }}
           >
             <div

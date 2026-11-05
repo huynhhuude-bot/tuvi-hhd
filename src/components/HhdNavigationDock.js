@@ -9,12 +9,6 @@ import {
   buildVietQrUrl,
   isAdminAuthenticated
 } from '../data/monetizationData';
-import {
-  HHD_COLOR_THEMES,
-  getSavedHhdThemeId,
-  getHhdThemeById,
-  applyHhdTheme
-} from '../data/themeData';
 
 const HHD_FEATURES = [
   {
@@ -40,14 +34,6 @@ const HHD_FEATURES = [
     title: 'Cân Xương Tính Số & Bát Tự',
     subtitle: 'Tính mấy lượng mấy chỉ (Viên Thiên Cang) & kiểm tra Bát Tự khuyết hành',
     badge: 'Mới · Hot'
-  },
-  {
-    href: '/phong-thuy-thuong-hieu',
-    icon: '🎨',
-    shortLabel: 'Màu Logo & Biển Hiệu',
-    title: 'Phong Thủy Thương Hiệu K94',
-    subtitle: 'Chọn màu Logo, hình khối biểu trưng, biển hiệu quảng cáo & ngành nghề',
-    badge: 'B2B K94'
   },
   {
     href: '/phong-thuy-ban-lam-viec',
@@ -199,8 +185,6 @@ export default function HhdNavigationDock() {
   const pathname = rawPathname.length > 1 && rawPathname.endsWith('/') ? rawPathname.slice(0, -1) : rawPathname;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [qrModalOpen, setQrModalOpen] = useState(false);
-  const [themeModalOpen, setThemeModalOpen] = useState(false);
-  const [currentThemeId, setCurrentThemeId] = useState('huyen-vu');
   const [config, setConfig] = useState(DEFAULT_MONETIZATION_CONFIG);
   const [selectedAmount, setSelectedAmount] = useState(68000);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -266,27 +250,20 @@ export default function HhdNavigationDock() {
     setConfig(loaded);
     setSelectedAmount(loaded.donation?.defaultAmount || 68000);
     setIsAdmin(isAdminAuthenticated());
-    setCurrentThemeId(getSavedHhdThemeId());
 
     const onUpdate = () => {
       const next = loadMonetizationConfig();
       setConfig(next);
     };
     const onAuthChange = () => setIsAdmin(isAdminAuthenticated());
-    const onThemeChange = (e) => {
-      setCurrentThemeId(e?.detail || getSavedHhdThemeId());
-    };
     window.addEventListener('hhd-monetization-updated', onUpdate);
     window.addEventListener('hhd-admin-auth-changed', onAuthChange);
-    window.addEventListener('hhd-theme-changed', onThemeChange);
     return () => {
       window.removeEventListener('hhd-monetization-updated', onUpdate);
       window.removeEventListener('hhd-admin-auth-changed', onAuthChange);
-      window.removeEventListener('hhd-theme-changed', onThemeChange);
     };
   }, []);
 
-  const currentThemeObj = getHhdThemeById(currentThemeId);
   const featuredProducts = (config.products || []).slice(0, 4);
 
   return (
@@ -294,12 +271,11 @@ export default function HhdNavigationDock() {
       {/* Global Affiliate Showcase + K94 Media Ad Banners + Contact Footer */}
       <div
         style={{
-          background: currentThemeObj.footerBg,
-          borderTop: '1px solid rgba(201,168,76,0.32)',
+          background: 'linear-gradient(180deg, #141B3B 0%, #0D1229 100%)',
+          borderTop: '1px solid rgba(245, 200, 76, 0.36)',
           padding: '44px 20px 104px',
-          color: '#E2E4E9',
-          fontFamily: 'var(--font-sans, sans-serif)',
-          transition: 'background 0.25s ease'
+          color: '#F2F6FD',
+          fontFamily: 'var(--font-sans, sans-serif)'
         }}
       >
         <div style={{ maxWidth: 1120, margin: '0 auto' }}>
@@ -763,137 +739,6 @@ export default function HhdNavigationDock() {
         </div>
       )}
 
-      {/* Modal: Chọn 4 Màu Giao Diện Phong Thủy HHD */}
-      {themeModalOpen && (
-        <div
-          onClick={() => setThemeModalOpen(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            background: 'rgba(6, 7, 11, 0.82)',
-            backdropFilter: 'blur(10px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 20
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              width: '100%',
-              maxWidth: 620,
-              background: 'linear-gradient(160deg, #171A26, #0C0E16)',
-              border: '2px solid #c9a84c',
-              borderRadius: 24,
-              padding: 26,
-              color: '#E2E4E9',
-              boxShadow: '0 24px 80px rgba(0,0,0,0.9)'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-              <div>
-                <div style={{ fontSize: 11, color: '#c9a84c', fontWeight: 800, letterSpacing: 1 }}>
-                  🎨 TÙY CHỌN MÀU SẮC GIAO DIỆN NGŨ HÀNH HHD
-                </div>
-                <h3 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 22, color: '#F4E3B2', margin: '4px 0 0 0' }}>
-                  Chọn Bảng Màu Giao Diện Bạn Yêu Thích (4 Chế Độ)
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setThemeModalOpen(false)}
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 99,
-                  border: '1px solid rgba(201,168,76,0.4)',
-                  background: 'transparent',
-                  color: '#F4E3B2',
-                  cursor: 'pointer'
-                }}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 12 }}>
-              {HHD_COLOR_THEMES.map((t) => {
-                const isSelected = t.id === currentThemeId;
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={() => {
-                      applyHhdTheme(t.id);
-                      setCurrentThemeId(t.id);
-                    }}
-                    style={{
-                      textAlign: 'left',
-                      padding: 16,
-                      borderRadius: 16,
-                      border: isSelected ? '2px solid #FFD54F' : '1px solid rgba(201,168,76,0.28)',
-                      background: isSelected ? 'rgba(201,168,76,0.18)' : 'rgba(255,255,255,0.03)',
-                      color: '#E2E4E9',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      gap: 10
-                    }}
-                  >
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                        <span style={{ fontSize: 22 }}>{t.icon}</span>
-                        <span
-                          style={{
-                            fontSize: 10,
-                            padding: '2px 8px',
-                            borderRadius: 99,
-                            background: isSelected ? '#FFD54F' : 'rgba(201,168,76,0.18)',
-                            color: isSelected ? '#090D16' : '#c9a84c',
-                            fontWeight: 800
-                          }}
-                        >
-                          {isSelected ? '✓ Đang dùng' : t.elementBadge}
-                        </span>
-                      </div>
-                      <div style={{ fontSize: 15.5, fontWeight: 800, color: '#F4E3B2', marginBottom: 4 }}>
-                        {t.name}
-                      </div>
-                      <div style={{ fontSize: 12, color: '#A3A8B8', lineHeight: 1.45 }}>
-                        {t.desc}
-                      </div>
-                    </div>
-
-                    {/* 4 Preview Color Swatches */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-                      {t.previewColors.map((hex, idx) => (
-                        <span
-                          key={idx}
-                          style={{
-                            width: 24,
-                            height: 24,
-                            borderRadius: 99,
-                            background: hex,
-                            border: '1.5px solid rgba(255,255,255,0.45)',
-                            display: 'inline-block'
-                          }}
-                        />
-                      ))}
-                      <span style={{ marginLeft: 'auto', fontSize: 11.5, fontWeight: 800, color: '#FFD54F' }}>
-                        {isSelected ? 'Đang kích hoạt' : 'Áp dụng →'}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Persistent Floating Bottom Navigation Dock with < > Buttons & Mouse Drag-to-Scroll */}
       <style>{`
         .hhd-dock-scroll-strip::-webkit-scrollbar {
@@ -912,12 +757,12 @@ export default function HhdNavigationDock() {
           transform: 'translateX(-50%)',
           zIndex: 9990,
           width: 'min(96vw, 1340px)',
-          background: currentThemeObj.dockBg,
-          backdropFilter: 'blur(14px)',
-          border: '1px solid rgba(201, 168, 76, 0.5)',
+          background: 'rgba(18, 22, 44, 0.96)',
+          backdropFilter: 'blur(16px)',
+          border: '1.5px solid rgba(240, 196, 81, 0.55)',
           borderRadius: 999,
           padding: '6px 8px',
-          boxShadow: '0 10px 36px rgba(0, 0, 0, 0.78), 0 0 20px rgba(201, 168, 76, 0.16)',
+          boxShadow: '0 12px 40px rgba(6, 9, 22, 0.85), 0 0 24px rgba(139, 92, 246, 0.25)',
           display: 'flex',
           alignItems: 'center',
           gap: 6
@@ -934,9 +779,9 @@ export default function HhdNavigationDock() {
             gap: 5,
             padding: '7px 12px',
             borderRadius: 999,
-            border: '1px solid #c9a84c',
-            background: 'rgba(201,168,76,0.22)',
-            color: '#F4E3B2',
+            border: '1px solid #F0C451',
+            background: 'rgba(240, 196, 81, 0.24)',
+            color: '#FFF5D6',
             fontSize: 12,
             fontWeight: 800,
             whiteSpace: 'nowrap',
@@ -944,30 +789,6 @@ export default function HhdNavigationDock() {
           }}
         >
           <span>✨ Menu HHD</span>
-        </button>
-
-        {/* Pinned 4-Color Theme Switcher Button */}
-        <button
-          type="button"
-          onClick={() => setThemeModalOpen((v) => !v)}
-          title="Đổi Màu Giao Diện Phong Thủy (4 Chế Độ: Huyền Vũ, Chu Sa, Giấy Dó, Ngọc Bích)"
-          style={{
-            flexShrink: 0,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 5,
-            padding: '7px 12px',
-            borderRadius: 999,
-            border: '1px solid #FFD54F',
-            background: 'linear-gradient(135deg, rgba(201,168,76,0.32), rgba(229,57,53,0.25))',
-            color: '#FFF3D1',
-            fontSize: 12,
-            fontWeight: 800,
-            whiteSpace: 'nowrap',
-            cursor: 'pointer'
-          }}
-        >
-          <span>🎨 Giao Diện: {currentThemeObj.icon} {currentThemeObj.shortName}</span>
         </button>
 
         {/* Left Arrow Button (<) */}
