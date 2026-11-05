@@ -20,6 +20,14 @@ const HHD_FEATURES = [
     badge: 'Chính Tông'
   },
   {
+    href: '/duc-hai-fishing',
+    icon: '🎣',
+    shortLabel: 'Shop Đồ Câu Đức Hải',
+    title: 'Đức Hải Fishing — Vĩnh Long',
+    subtitle: 'Chuyên cần câu, máy câu, mồi câu, lưỡi câu, phao chì · ĐT/Zalo: 0983.339.397',
+    badge: 'Shop Đồ Câu'
+  },
+  {
     href: '/vat-pham-phong-thuy',
     icon: '🛍',
     shortLabel: 'Vật Phẩm Hợp Mệnh',

@@ -42,176 +42,185 @@ export default function HhdSideAdLayout({ children }) {
   const rightSlots = config.sidePanels?.right || DEFAULT_MONETIZATION_CONFIG.sidePanels.right;
   const topAffiliateProducts = (config.products || []).slice(0, 2);
 
-  const renderAdCard = (slot, sideLabel) => (
-    <div
-      key={slot.id}
-      style={{
-        background: slot.isRentalSlot
-          ? 'linear-gradient(160deg, rgba(201,168,76,0.14) 0%, rgba(15,17,26,0.96) 100%)'
-          : 'rgba(17, 19, 28, 0.94)',
-        border: slot.isRentalSlot
-          ? '1.5px dashed rgba(201, 168, 76, 0.65)'
-          : '1px solid rgba(201, 168, 76, 0.3)',
-        borderRadius: 16,
-        padding: 14,
-        boxShadow: '0 10px 28px rgba(0, 0, 0, 0.45)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 9
-      }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
-        <span
-          style={{
-            fontSize: 10,
-            padding: '2px 8px',
-            borderRadius: 99,
-            background: slot.isRentalSlot ? 'rgba(229, 57, 53, 0.24)' : 'rgba(201, 168, 76, 0.2)',
-            color: slot.isRentalSlot ? '#FF8A80' : '#c9a84c',
-            fontWeight: 800,
-            letterSpacing: 0.4
-          }}
-        >
-          {slot.badge}
-        </span>
-        {slot.priceTag && (
-          <span style={{ fontSize: 10, color: '#81C784', fontWeight: 700 }}>
-            {slot.priceTag}
-          </span>
-        )}
-      </div>
-
-      {slot.imageUrl ? (
-        <a href={slot.ctaUrl} target="_blank" rel="noreferrer sponsored" style={{ display: 'block' }}>
-          <img
-            src={slot.imageUrl}
-            alt={slot.title}
-            style={{
-              width: '100%',
-              height: 120,
-              objectFit: 'cover',
-              borderRadius: 10,
-              border: '1px solid rgba(201,168,76,0.3)'
-            }}
-          />
+  const renderAdCard = (slot, sideLabel) => {
+    const isInternalLink = Boolean(slot.ctaUrl && slot.ctaUrl.startsWith('/'));
+    const CardLinkWrapper = ({ children: linkChildren, style }) =>
+      isInternalLink ? (
+        <Link href={slot.ctaUrl} style={style}>
+          {linkChildren}
+        </Link>
+      ) : (
+        <a href={slot.ctaUrl} target="_blank" rel="noreferrer sponsored" style={style}>
+          {linkChildren}
         </a>
-      ) : slot.isRentalSlot ? (
-        <div
-          style={{
-            borderRadius: 10,
-            border: '1px dashed rgba(201,168,76,0.4)',
-            background: 'rgba(201,168,76,0.06)',
-            padding: '12px 10px',
-            textAlign: 'center'
-          }}
-        >
-          <div style={{ fontSize: 20, marginBottom: 2 }}>📢</div>
-          <div style={{ fontSize: 11, fontWeight: 800, color: '#F4E3B2' }}>
-            KHUNG BANNER {sideLabel}
-          </div>
-          <div style={{ fontSize: 10, color: '#c9a84c' }}>
-            Kích thước chuẩn: 240 × 360 px
-          </div>
-        </div>
-      ) : null}
+      );
 
+    return (
       <div
+        key={slot.id}
         style={{
-          fontFamily: 'var(--font-serif, serif)',
-          fontWeight: 700,
-          fontSize: 14,
-          color: '#F4E3B2',
-          lineHeight: 1.38
+          background: slot.isRentalSlot
+            ? 'linear-gradient(160deg, rgba(201,168,76,0.14) 0%, rgba(15,17,26,0.96) 100%)'
+            : 'rgba(17, 19, 28, 0.94)',
+          border: slot.isRentalSlot
+            ? '1.5px dashed rgba(201, 168, 76, 0.65)'
+            : '1px solid rgba(201, 168, 76, 0.3)',
+          borderRadius: 16,
+          padding: 14,
+          boxShadow: '0 10px 28px rgba(0, 0, 0, 0.45)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 9
         }}
       >
-        {slot.title}
-      </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
+          <span
+            style={{
+              fontSize: 10,
+              padding: '2px 8px',
+              borderRadius: 99,
+              background: slot.isRentalSlot ? 'rgba(229, 57, 53, 0.24)' : 'rgba(201, 168, 76, 0.2)',
+              color: slot.isRentalSlot ? '#FF8A80' : '#c9a84c',
+              fontWeight: 800,
+              letterSpacing: 0.4
+            }}
+          >
+            {slot.badge}
+          </span>
+          {slot.priceTag && (
+            <span style={{ fontSize: 10, color: '#81C784', fontWeight: 700 }}>
+              {slot.priceTag}
+            </span>
+          )}
+        </div>
 
-      <div style={{ fontSize: 11.5, color: '#9DA3B4', lineHeight: 1.48 }}>
-        {slot.desc}
-      </div>
+        {slot.imageUrl ? (
+          <CardLinkWrapper style={{ display: 'block', textDecoration: 'none' }}>
+            <img
+              src={slot.imageUrl}
+              alt={slot.title}
+              style={{
+                width: '100%',
+                height: 120,
+                objectFit: 'cover',
+                borderRadius: 10,
+                border: '1px solid rgba(201,168,76,0.3)'
+              }}
+            />
+          </CardLinkWrapper>
+        ) : slot.isRentalSlot ? (
+          <div
+            style={{
+              borderRadius: 10,
+              border: '1px dashed rgba(201,168,76,0.4)',
+              background: 'rgba(201,168,76,0.06)',
+              padding: '12px 10px',
+              textAlign: 'center'
+            }}
+          >
+            <div style={{ fontSize: 20, marginBottom: 2 }}>📢</div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: '#F4E3B2' }}>
+              KHUNG BANNER {sideLabel}
+            </div>
+            <div style={{ fontSize: 10, color: '#c9a84c' }}>
+              Kích thước chuẩn: 240 × 360 px
+            </div>
+          </div>
+        ) : null}
 
-      {/* 2x2 Product Image Gallery (Máy Câu, Cần Câu, Mồi, Phao Chì) */}
-      {Array.isArray(slot.galleryImages) && slot.galleryImages.length > 0 && (
-        <div
+        <CardLinkWrapper
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 6,
+            fontFamily: 'var(--font-serif, serif)',
+            fontWeight: 700,
+            fontSize: 14,
+            color: '#F4E3B2',
+            lineHeight: 1.38,
+            textDecoration: 'none'
+          }}
+        >
+          {slot.title}
+        </CardLinkWrapper>
+
+        <div style={{ fontSize: 11.5, color: '#9DA3B4', lineHeight: 1.48 }}>
+          {slot.desc}
+        </div>
+
+        {/* 2x2 Product Image Gallery (Máy Câu, Cần Câu, Mồi, Phao Chì) */}
+        {Array.isArray(slot.galleryImages) && slot.galleryImages.length > 0 && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 6,
+              marginTop: 2
+            }}
+          >
+            {slot.galleryImages.map((g, i) => (
+              <CardLinkWrapper
+                key={i}
+                style={{
+                  display: 'block',
+                  textDecoration: 'none',
+                  background: '#090D16',
+                  borderRadius: 8,
+                  overflow: 'hidden',
+                  border: '1px solid rgba(201,168,76,0.28)'
+                }}
+              >
+                <img
+                  src={g.img}
+                  alt={g.label}
+                  style={{ width: '100%', height: 74, objectFit: 'cover', display: 'block' }}
+                />
+              </CardLinkWrapper>
+            ))}
+          </div>
+        )}
+
+        {/* Store Address & Direct Phone Highlight */}
+        {slot.address && (
+          <CardLinkWrapper
+            style={{
+              display: 'block',
+              textDecoration: 'none',
+              padding: '7px 9px',
+              borderRadius: 8,
+              background: 'rgba(56, 189, 248, 0.1)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              fontSize: 11,
+              color: '#E0F2FE',
+              lineHeight: 1.45
+            }}
+          >
+            <div>📍 <strong>Đ/c:</strong> {slot.address}</div>
+            {slot.phone && (
+              <div style={{ marginTop: 3, color: '#FDE047', fontWeight: 800 }}>
+                📞 ĐT/Zalo: {slot.phone}
+              </div>
+            )}
+          </CardLinkWrapper>
+        )}
+
+        <CardLinkWrapper
+          style={{
+            display: 'block',
+            padding: '8px 10px',
+            borderRadius: 9,
+            background: 'linear-gradient(135deg, #e0c168, #b88928)',
+            border: '1px solid #c9a84c',
+            color: '#0B0C10',
+            fontWeight: 800,
+            fontSize: 11.5,
+            textAlign: 'center',
+            textDecoration: 'none',
             marginTop: 2
           }}
         >
-          {slot.galleryImages.map((g, i) => (
-            <a
-              key={i}
-              href={slot.ctaUrl}
-              target="_blank"
-              rel="noreferrer sponsored"
-              style={{
-                display: 'block',
-                textDecoration: 'none',
-                background: '#090D16',
-                borderRadius: 8,
-                overflow: 'hidden',
-                border: '1px solid rgba(201,168,76,0.28)'
-              }}
-            >
-              <img
-                src={g.img}
-                alt={g.label}
-                style={{ width: '100%', height: 74, objectFit: 'cover', display: 'block' }}
-              />
-            </a>
-          ))}
-        </div>
-      )}
-
-      {/* Store Address & Direct Phone Highlight */}
-      {slot.address && (
-        <div
-          style={{
-            padding: '7px 9px',
-            borderRadius: 8,
-            background: 'rgba(56, 189, 248, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.35)',
-            fontSize: 11,
-            color: '#E0F2FE',
-            lineHeight: 1.45
-          }}
-        >
-          <div>📍 <strong>Đ/c:</strong> {slot.address}</div>
-          {slot.phone && (
-            <div style={{ marginTop: 3, color: '#FDE047', fontWeight: 800 }}>
-              📞 ĐT/Zalo: {slot.phone}
-            </div>
-          )}
-        </div>
-      )}
-
-      <a
-        href={slot.ctaUrl}
-        target="_blank"
-        rel="noreferrer sponsored"
-        style={{
-          display: 'block',
-          padding: '8px 10px',
-          borderRadius: 9,
-          background: slot.isRentalSlot
-            ? 'linear-gradient(135deg, #e0c168, #b88928)'
-            : 'linear-gradient(135deg, #e0c168, #b88928)',
-          border: '1px solid #c9a84c',
-          color: '#0B0C10',
-          fontWeight: 800,
-          fontSize: 11.5,
-          textAlign: 'center',
-          textDecoration: 'none',
-          marginTop: 2
-        }}
-      >
-        {slot.ctaText}
-      </a>
-    </div>
-  );
+          {slot.ctaText}
+        </CardLinkWrapper>
+      </div>
+    );
+  };
 
   return (
     <div style={{ background: '#0B0C10', minHeight: '100vh', position: 'relative' }}>

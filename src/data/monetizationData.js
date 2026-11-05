@@ -1,4 +1,4 @@
-export const MONETIZATION_STORAGE_KEY = 'hhd_k94_monetization_v2';
+export const MONETIZATION_STORAGE_KEY = 'hhd_k94_monetization_v3';
 
 // High-detail SVG Data URIs for Đức Hải Fishing (100% instant load, never broken offline/online)
 export const DUC_HAI_FISHING_BANNER_SVG =
@@ -180,11 +180,11 @@ export const DEFAULT_MONETIZATION_CONFIG = {
         desc: 'Chuyên mua bán dụng cụ câu cá, mồi câu, cần câu, máy câu, lưỡi câu, phao chì chính hãng, uy tín, giá tốt nhất.',
         address: 'Ấp Cái Cui, xã Hòa Hiệp, Tỉnh Vĩnh Long',
         phone: '0983339397',
-        priceTag: 'Sỉ & Lẻ Đồ Câu',
+        priceTag: 'Bấm Xem Shop →',
         imageUrl: DUC_HAI_FISHING_BANNER_SVG,
         galleryImages: DUC_HAI_GALLERY,
-        ctaText: '📞 Gọi / Zalo Đặt Hàng: 0983.339.397',
-        ctaUrl: 'https://zalo.me/0983339397',
+        ctaText: '🎣 Mở Trang Web Đồ Câu Đức Hải →',
+        ctaUrl: '/duc-hai-fishing',
         isRentalSlot: false
       },
       {
