@@ -1,8 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import {
+  DEFAULT_MONETIZATION_CONFIG,
+  loadMonetizationConfig,
+  buildVietQrUrl
+} from '../data/monetizationData';
 
 const HHD_FEATURES = [
   {
@@ -12,6 +17,14 @@ const HHD_FEATURES = [
     title: 'Tử Vi Đẩu Số HHD',
     subtitle: 'Lập lá số Chân Thái Dương Thời, AI Luận Giải 4 tầng & Hợp Hôn',
     badge: 'Chính Tông'
+  },
+  {
+    href: '/vat-pham-phong-thuy',
+    icon: '🛍',
+    shortLabel: 'Vật Phẩm Hợp Mệnh',
+    title: 'Cửa Hàng Pháp Khí & Vật Phẩm',
+    subtitle: 'Thỉnh Vòng Trầm Hương, Thạch Anh, Phật Bản Mệnh, Tỳ Hưu theo Ngũ Hành',
+    badge: 'Affiliate'
   },
   {
     href: '/sim-phong-thuy',
@@ -111,85 +124,399 @@ const HHD_FEATURES = [
   }
 ];
 
+const LUCKY_AMOUNTS = [
+  { val: 39000, label: '39.000đ (Thần Tài Nhỏ)' },
+  { val: 68000, label: '68.000đ (Lộc Phát)' },
+  { val: 79000, label: '79.000đ (Thần Tài Lớn)' },
+  { val: 168000, label: '168.000đ (Nhất Lộc Phát)' }
+];
+
 export default function HhdNavigationDock() {
   const rawPathname = usePathname() || '/';
   const pathname = rawPathname.length > 1 && rawPathname.endsWith('/') ? rawPathname.slice(0, -1) : rawPathname;
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [config, setConfig] = useState(DEFAULT_MONETIZATION_CONFIG);
+  const [selectedAmount, setSelectedAmount] = useState(68000);
+
+  useEffect(() => {
+    const loaded = loadMonetizationConfig();
+    setConfig(loaded);
+    setSelectedAmount(loaded.donation?.defaultAmount || 68000);
+    const onUpdate = () => {
+      const next = loadMonetizationConfig();
+      setConfig(next);
+    };
+    window.addEventListener('hhd-monetization-updated', onUpdate);
+    return () => window.removeEventListener('hhd-monetization-updated', onUpdate);
+  }, []);
+
+  const featuredProducts = (config.products || []).slice(0, 4);
 
   return (
     <>
-      {/* Global K94 Media Contact Footer Banner */}
+      {/* Global Affiliate Showcase + K94 Media Ad Banners + Contact Footer */}
       <div
         style={{
-          background: 'linear-gradient(180deg, rgba(11,12,16,0.96) 0%, #07080C 100%)',
+          background: 'linear-gradient(180deg, #090B10 0%, #06070B 100%)',
           borderTop: '1px solid rgba(201,168,76,0.32)',
-          padding: '28px 20px 96px',
-          textAlign: 'center',
+          padding: '44px 20px 104px',
           color: '#E2E4E9',
           fontFamily: 'var(--font-sans, sans-serif)'
         }}
       >
-        <div style={{ maxWidth: 880, margin: '0 auto' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '5px 16px',
-              borderRadius: 999,
-              background: 'rgba(201,168,76,0.14)',
-              border: '1px solid rgba(201,168,76,0.4)',
-              color: '#F4E3B2',
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 1,
-              marginBottom: 10
-            }}
-          >
-            <span>✦ ĐƠN VỊ PHÁT TRIỂN & BẢN QUYỀN: CÔNG TY TRUYỀN THÔNG K94 ✦</span>
+        <div style={{ maxWidth: 1120, margin: '0 auto' }}>
+          {/* Contextual Affiliate Strip */}
+          {pathname !== '/vat-pham-phong-thuy' && pathname !== '/quan-ly-kiem-tien' && (
+            <div style={{ marginBottom: 32 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
+                <div>
+                  <span style={{ fontSize: 11, color: '#c9a84c', letterSpacing: 1.5, textTransform: 'uppercase', fontWeight: 700 }}>
+                    ✦ PHÁP KHÍ BỔ KHUYẾT NGŨ HÀNH & CHIÊU TÀI TỤ LỘC
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 22, color: '#F4E3B2', margin: '4px 0 0 0' }}>
+                    Gợi Ý Vật Phẩm Phong Thủy Hộ Mệnh Hợp Tuổi Của Bạn
+                  </h3>
+                </div>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <Link
+                    href="/vat-pham-phong-thuy"
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: 99,
+                      border: '1px solid #c9a84c',
+                      background: 'rgba(201,168,76,0.18)',
+                      color: '#F4E3B2',
+                      fontSize: 12.5,
+                      fontWeight: 700,
+                      textDecoration: 'none'
+                    }}
+                  >
+                    🛍 Xem Tất Cả Vật Phẩm Hợp Mệnh →
+                  </Link>
+                  <Link
+                    href="/quan-ly-kiem-tien"
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: 99,
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      color: '#9DA3B4',
+                      fontSize: 12,
+                      textDecoration: 'none'
+                    }}
+                  >
+                    ⚙️ Sửa Link Affiliate
+                  </Link>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(245px, 1fr))', gap: 14 }}>
+                {featuredProducts.map((item) => (
+                  <div
+                    key={item.id}
+                    style={{
+                      background: 'rgba(20, 22, 32, 0.9)',
+                      border: '1px solid rgba(201,168,76,0.28)',
+                      borderRadius: 16,
+                      padding: 16,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: 10
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                        <span style={{ fontSize: 22 }}>{item.icon}</span>
+                        <span style={{ fontSize: 10.5, padding: '2px 8px', borderRadius: 99, background: 'rgba(229,57,53,0.2)', color: '#FF8A80', fontWeight: 700 }}>
+                          {item.commissionBadge}
+                        </span>
+                      </div>
+                      <div style={{ fontWeight: 700, color: '#F4E3B2', fontSize: 14.5, lineHeight: 1.4, marginBottom: 4 }}>
+                        {item.name}
+                      </div>
+                      <div style={{ fontSize: 12, color: '#9DA3B4', lineHeight: 1.45 }}>{item.benefit}</div>
+                    </div>
+
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                        <span style={{ fontSize: 17, fontWeight: 800, color: '#FFD54F' }}>{item.price}</span>
+                        <span style={{ fontSize: 11.5, color: '#8C93A8', textDecoration: 'line-through' }}>{item.originalPrice}</span>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                        <a
+                          href={item.shopeeUrl}
+                          target="_blank"
+                          rel="noreferrer sponsored"
+                          style={{
+                            padding: '8px 8px',
+                            borderRadius: 8,
+                            background: 'linear-gradient(135deg, #EE4D2D, #D73211)',
+                            color: '#FFF',
+                            fontWeight: 800,
+                            fontSize: 11.5,
+                            textAlign: 'center',
+                            textDecoration: 'none'
+                          }}
+                        >
+                          🛒 Shopee
+                        </a>
+                        <a
+                          href={item.tiktokUrl || item.shopeeUrl}
+                          target="_blank"
+                          rel="noreferrer sponsored"
+                          style={{
+                            padding: '8px 8px',
+                            borderRadius: 8,
+                            background: 'rgba(255,255,255,0.08)',
+                            border: '1px solid rgba(201,168,76,0.35)',
+                            color: '#F4E3B2',
+                            fontWeight: 700,
+                            fontSize: 11.5,
+                            textAlign: 'center',
+                            textDecoration: 'none'
+                          }}
+                        >
+                          🎵 TikTok
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* K94 Media Advertising Banner Strip */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 14, marginBottom: 30 }}>
+            {(config.banners || []).slice(0, 3).map((b) => (
+              <div
+                key={b.id}
+                style={{
+                  background: 'linear-gradient(155deg, rgba(201,168,76,0.12), rgba(16,18,28,0.92))',
+                  border: '1px solid rgba(201,168,76,0.35)',
+                  borderRadius: 16,
+                  padding: 18,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: 10
+                }}
+              >
+                <div>
+                  <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: 'rgba(201,168,76,0.2)', color: '#c9a84c', fontWeight: 800 }}>
+                    {b.badge}
+                  </span>
+                  <div style={{ fontWeight: 700, color: '#F4E3B2', fontSize: 15, margin: '6px 0 4px' }}>{b.title}</div>
+                  <div style={{ fontSize: 12, color: '#A3A8B8', lineHeight: 1.5 }}>{b.desc}</div>
+                </div>
+                <a
+                  href={b.ctaUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-block',
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    background: 'rgba(201,168,76,0.2)',
+                    border: '1px solid #c9a84c',
+                    color: '#F4E3B2',
+                    fontWeight: 700,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    textDecoration: 'none'
+                  }}
+                >
+                  {b.ctaText}
+                </a>
+              </div>
+            ))}
           </div>
 
-          <div style={{ fontSize: 18, fontWeight: 700, color: '#F4E3B2', marginBottom: 6 }}>
-            Hệ Thống Tử Vi & 12 Pháp Khí Huyền Học HHD — Công ty Truyền thông K94
-          </div>
+          {/* K94 Media Identity & Quick Action Buttons */}
+          <div style={{ textAlign: 'center', borderTop: '1px dashed rgba(201,168,76,0.25)', paddingTop: 22 }}>
+            <div style={{ fontSize: 17, fontWeight: 700, color: '#F4E3B2', marginBottom: 10 }}>
+              Hệ Thống Tử Vi & 13 Pháp Khí Huyền Học HHD — Bản quyền: Công ty Truyền thông K94
+            </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
-            <a
-              href="tel:0983339397"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '9px 20px',
-                borderRadius: 999,
-                background: 'linear-gradient(135deg, #e0c168, #b88928)',
-                color: '#0B0C10',
-                fontWeight: 800,
-                fontSize: 14,
-                textDecoration: 'none',
-                boxShadow: '0 6px 20px rgba(201,168,76,0.35)'
-              }}
-            >
-              <span>📞 Hotline / Zalo: 0983.339.397 (0983339397)</span>
-            </a>
-            <span
-              style={{
-                padding: '8px 16px',
-                borderRadius: 999,
-                border: '1px solid rgba(102,187,106,0.4)',
-                background: 'rgba(67,160,71,0.14)',
-                color: '#81C784',
-                fontSize: 13,
-                fontWeight: 700
-              }}
-            >
-              ✓ Miễn Phí 100% · Mở Trực Tiếp Không Cần Mật Khẩu
-            </span>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <a
+                href={`tel:${config.hotline}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '9px 18px',
+                  borderRadius: 999,
+                  background: 'linear-gradient(135deg, #e0c168, #b88928)',
+                  color: '#0B0C10',
+                  fontWeight: 800,
+                  fontSize: 13.5,
+                  textDecoration: 'none'
+                }}
+              >
+                <span>📞 Hotline K94: {config.hotlineDisplay}</span>
+              </a>
+
+              <a
+                href={config.zaloUrl}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '9px 18px',
+                  borderRadius: 999,
+                  background: 'rgba(30, 136, 229, 0.22)',
+                  border: '1px solid #42A5F5',
+                  color: '#90CAF9',
+                  fontWeight: 800,
+                  fontSize: 13.5,
+                  textDecoration: 'none'
+                }}
+              >
+                <span>💬 Nhắn Zalo Tư Vấn & Đặt Quảng Cáo</span>
+              </a>
+
+              <button
+                onClick={() => setQrModalOpen(true)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '9px 18px',
+                  borderRadius: 999,
+                  background: 'rgba(211, 47, 47, 0.24)',
+                  border: '1px solid #EF5350',
+                  color: '#FFCDD2',
+                  fontWeight: 800,
+                  fontSize: 13.5,
+                  cursor: 'pointer'
+                }}
+              >
+                <span>🧧 Gieo Duyên Nhận Lộc / Mời Trà Ông Đồ (QR)</span>
+              </button>
+
+              <Link
+                href="/quan-ly-kiem-tien"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '9px 16px',
+                  borderRadius: 999,
+                  border: '1px solid rgba(201,168,76,0.4)',
+                  background: 'rgba(255,255,255,0.04)',
+                  color: '#E8D5A3',
+                  fontWeight: 700,
+                  fontSize: 13,
+                  textDecoration: 'none'
+                }}
+              >
+                <span>⚙️ Quản Trị Kiếm Tiền & Link Aff</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Modal Drawer showcasing all 12+ HHD Metaphysics Features */}
+      {/* Modal: VietQR Gieo Duyên / Mời Trà Ông Đồ K94 */}
+      {qrModalOpen && (
+        <div
+          onClick={() => setQrModalOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            background: 'rgba(6, 7, 11, 0.85)',
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 20
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '100%',
+              maxWidth: 460,
+              background: 'linear-gradient(160deg, #1A1412, #0E1018)',
+              border: '2px solid #c9a84c',
+              borderRadius: 24,
+              padding: 26,
+              textAlign: 'center',
+              color: '#E2E4E9',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.9)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <span style={{ fontSize: 12, color: '#c9a84c', fontWeight: 800, letterSpacing: 1 }}>
+                🧧 HÒM CÔNG ĐỨC & GIEO DUYÊN LÀNH K94
+              </span>
+              <button
+                onClick={() => setQrModalOpen(false)}
+                style={{ width: 32, height: 32, borderRadius: 99, border: '1px solid rgba(201,168,76,0.4)', background: 'transparent', color: '#F4E3B2', cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <h3 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 22, color: '#F4E3B2', margin: '0 0 8px 0' }}>
+              Mời Trà Ông Đồ & Gieo Duyên HHD
+            </h3>
+            <p style={{ fontSize: 13, color: '#B0B6C6', margin: '0 0 14px 0', lineHeight: 1.5 }}>
+              {config.donation?.note}
+            </p>
+
+            {/* Lucky Amount Selector */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
+              {LUCKY_AMOUNTS.map((a) => (
+                <button
+                  key={a.val}
+                  onClick={() => setSelectedAmount(a.val)}
+                  style={{
+                    padding: '8px 10px',
+                    borderRadius: 10,
+                    border: selectedAmount === a.val ? '1px solid #c9a84c' : '1px solid rgba(255,255,255,0.12)',
+                    background: selectedAmount === a.val ? 'rgba(201,168,76,0.22)' : 'rgba(255,255,255,0.03)',
+                    color: selectedAmount === a.val ? '#FFD54F' : '#C5C9D6',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  {a.label}
+                </button>
+              ))}
+            </div>
+
+            <img
+              src={buildVietQrUrl(config.donation, selectedAmount)}
+              alt="VietQR Gieo Duyên HHD K94"
+              style={{ width: 240, height: 'auto', borderRadius: 16, border: '2px solid #c9a84c', background: '#FFF', padding: 8, margin: '0 auto 12px' }}
+            />
+
+            <div style={{ fontSize: 14, fontWeight: 800, color: '#F4E3B2' }}>
+              Ngân hàng {config.donation?.bankCode} · STK: {config.donation?.accountNo}
+            </div>
+            <div style={{ fontSize: 12.5, color: '#c9a84c', fontWeight: 700, marginBottom: 14 }}>
+              Chủ TK: {config.donation?.accountName}
+            </div>
+
+            <Link
+              href="/quan-ly-kiem-tien"
+              onClick={() => setQrModalOpen(false)}
+              style={{ fontSize: 12, color: '#9DA3B4', textDecoration: 'underline' }}
+            >
+              ⚙️ Đổi số tài khoản ngân hàng nhận QR tại đây
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Drawer showcasing all HHD Features */}
       {drawerOpen && (
         <div
           onClick={() => setDrawerOpen(false)}
@@ -223,24 +550,15 @@ export default function HhdNavigationDock() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
               <div>
                 <div style={{ fontSize: 11, color: '#c9a84c', letterSpacing: 1.5, textTransform: 'uppercase' }}>
-                  CÔNG TY TRUYỀN THÔNG K94 · HOTLINE: 0983.339.397 · MIỄN PHÍ 100%
+                  CÔNG TY TRUYỀN THÔNG K94 · HOTLINE/ZALO: 0983.339.397
                 </div>
                 <h2 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 26, color: '#F4E3B2', margin: '4px 0 0 0' }}>
-                  Trọn Bộ 12 Pháp Khí Phong Thủy, Tử Vi & Bói Toán HHD
+                  Trọn Bộ Pháp Khí Phong Thủy, Tử Vi, Bói Toán & Vật Phẩm HHD
                 </h2>
               </div>
               <button
                 onClick={() => setDrawerOpen(false)}
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 99,
-                  border: '1px solid rgba(201,168,76,0.35)',
-                  background: 'rgba(255,255,255,0.05)',
-                  color: '#F4E3B2',
-                  fontSize: 16,
-                  cursor: 'pointer'
-                }}
+                style={{ width: 36, height: 36, borderRadius: 99, border: '1px solid rgba(201,168,76,0.35)', background: 'rgba(255,255,255,0.05)', color: '#F4E3B2', fontSize: 16, cursor: 'pointer' }}
               >
                 ✕
               </button>
@@ -273,16 +591,10 @@ export default function HhdNavigationDock() {
                           {item.badge}
                         </span>
                       </div>
-                      <div style={{ fontWeight: 700, fontSize: 15, color: '#F4E3B2', marginBottom: 4 }}>
-                        {item.title}
-                      </div>
-                      <div style={{ fontSize: 12, color: '#9DA3B4', lineHeight: 1.45 }}>
-                        {item.subtitle}
-                      </div>
+                      <div style={{ fontWeight: 700, fontSize: 15, color: '#F4E3B2', marginBottom: 4 }}>{item.title}</div>
+                      <div style={{ fontSize: 12, color: '#9DA3B4', lineHeight: 1.45 }}>{item.subtitle}</div>
                     </div>
-                    <div style={{ fontSize: 11.5, color: '#c9a84c', fontWeight: 700 }}>
-                      Mở tính năng →
-                    </div>
+                    <div style={{ fontSize: 11.5, color: '#c9a84c', fontWeight: 700 }}>Mở tính năng →</div>
                   </Link>
                 );
               })}
@@ -300,7 +612,7 @@ export default function HhdNavigationDock() {
           transform: 'translateX(-50%)',
           zIndex: 9990,
           maxWidth: '96vw',
-          background: 'rgba(13, 15, 22, 0.94)',
+          background: 'rgba(13, 15, 22, 0.95)',
           backdropFilter: 'blur(14px)',
           border: '1px solid rgba(201, 168, 76, 0.45)',
           borderRadius: 999,
@@ -314,7 +626,6 @@ export default function HhdNavigationDock() {
       >
         <button
           onClick={() => setDrawerOpen((v) => !v)}
-          title="Mở bảng toàn bộ 12 tính năng Huyền Học HHD"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -330,7 +641,7 @@ export default function HhdNavigationDock() {
             cursor: 'pointer'
           }}
         >
-          <span>✨ 12 Tính Năng</span>
+          <span>✨ Menu HHD</span>
         </button>
 
         {HHD_FEATURES.map((item) => {
@@ -359,9 +670,30 @@ export default function HhdNavigationDock() {
           );
         })}
 
+        <button
+          onClick={() => setQrModalOpen(true)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5,
+            padding: '7px 11px',
+            borderRadius: 999,
+            border: '1px solid rgba(239,83,80,0.55)',
+            background: 'rgba(211,47,47,0.22)',
+            color: '#FFCDD2',
+            fontSize: 11.5,
+            fontWeight: 800,
+            whiteSpace: 'nowrap',
+            cursor: 'pointer'
+          }}
+        >
+          <span>🧧 Gieo Duyên QR</span>
+        </button>
+
         <a
-          href="tel:0983339397"
-          title="Công ty Truyền thông K94 - ĐT: 0983339397"
+          href={config.zaloUrl}
+          target="_blank"
+          rel="noreferrer"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -377,7 +709,7 @@ export default function HhdNavigationDock() {
             textDecoration: 'none'
           }}
         >
-          <span>📞 K94: 0983.339.397</span>
+          <span>💬 Zalo K94: {config.hotlineDisplay}</span>
         </a>
       </div>
     </>
