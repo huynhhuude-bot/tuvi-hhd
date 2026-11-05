@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -196,6 +196,62 @@ export default function HhdNavigationDock() {
   const [config, setConfig] = useState(DEFAULT_MONETIZATION_CONFIG);
   const [selectedAmount, setSelectedAmount] = useState(68000);
   const [isAdmin, setIsAdmin] = useState(false);
+
+  // Drag-to-scroll & Arrow scroll state for the Bottom Navigation Dock
+  const dockScrollRef = useRef(null);
+  const isMouseDownRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const dragDistanceRef = useRef(0);
+  const [isDraggingDock, setIsDraggingDock] = useState(false);
+
+  const scrollDockBy = (delta) => {
+    if (!dockScrollRef.current) return;
+    dockScrollRef.current.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  const handleDockMouseDown = (e) => {
+    if (!dockScrollRef.current) return;
+    isMouseDownRef.current = true;
+    dragDistanceRef.current = 0;
+    startXRef.current = e.pageX - dockScrollRef.current.offsetLeft;
+    scrollLeftRef.current = dockScrollRef.current.scrollLeft;
+  };
+
+  const handleDockMouseMove = (e) => {
+    if (!isMouseDownRef.current || !dockScrollRef.current) return;
+    const x = e.pageX - dockScrollRef.current.offsetLeft;
+    const walk = x - startXRef.current;
+    if (Math.abs(walk) > 5) {
+      if (!isDraggingDock) setIsDraggingDock(true);
+      e.preventDefault();
+      dragDistanceRef.current = Math.abs(walk);
+      dockScrollRef.current.scrollLeft = scrollLeftRef.current - walk * 1.35;
+    }
+  };
+
+  const handleDockMouseUpOrLeave = () => {
+    isMouseDownRef.current = false;
+    if (isDraggingDock) {
+      setTimeout(() => setIsDraggingDock(false), 50);
+    }
+  };
+
+  const handleDockClickCapture = (e) => {
+    if (dragDistanceRef.current > 6) {
+      e.preventDefault();
+      e.stopPropagation();
+      dragDistanceRef.current = 0;
+    }
+  };
+
+  const handleDockWheel = (e) => {
+    if (!dockScrollRef.current) return;
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      e.preventDefault();
+      dockScrollRef.current.scrollLeft += e.deltaY;
+    }
+  };
 
   useEffect(() => {
     const loaded = loadMonetizationConfig();
@@ -690,7 +746,16 @@ export default function HhdNavigationDock() {
         </div>
       )}
 
-      {/* Persistent Floating Bottom Navigation Dock */}
+      {/* Persistent Floating Bottom Navigation Dock with < > Buttons & Mouse Drag-to-Scroll */}
+      <style>{`
+        .hhd-dock-scroll-strip::-webkit-scrollbar {
+          display: none;
+        }
+        .hhd-dock-scroll-strip {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
       <div
         style={{
           position: 'fixed',
@@ -698,22 +763,24 @@ export default function HhdNavigationDock() {
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 9990,
-          maxWidth: '96vw',
-          background: 'rgba(13, 15, 22, 0.95)',
+          width: 'min(96vw, 1340px)',
+          background: 'rgba(13, 15, 22, 0.96)',
           backdropFilter: 'blur(14px)',
-          border: '1px solid rgba(201, 168, 76, 0.45)',
+          border: '1px solid rgba(201, 168, 76, 0.5)',
           borderRadius: 999,
-          padding: '6px 10px',
-          boxShadow: '0 10px 36px rgba(0, 0, 0, 0.75), 0 0 20px rgba(201, 168, 76, 0.15)',
+          padding: '6px 8px',
+          boxShadow: '0 10px 36px rgba(0, 0, 0, 0.78), 0 0 20px rgba(201, 168, 76, 0.16)',
           display: 'flex',
           alignItems: 'center',
-          gap: 4,
-          overflowX: 'auto'
+          gap: 6
         }}
       >
+        {/* Pinned All-Features Menu Button */}
         <button
+          type="button"
           onClick={() => setDrawerOpen((v) => !v)}
           style={{
+            flexShrink: 0,
             display: 'inline-flex',
             alignItems: 'center',
             gap: 5,
@@ -731,73 +798,154 @@ export default function HhdNavigationDock() {
           <span>✨ Menu HHD</span>
         </button>
 
-        {HHD_FEATURES.map((item) => {
-          const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                padding: '7px 10px',
-                borderRadius: 999,
-                textDecoration: 'none',
-                whiteSpace: 'nowrap',
-                fontSize: 11.5,
-                fontWeight: isActive ? 700 : 500,
-                color: isActive ? '#0B0C10' : '#E8D5A3',
-                background: isActive ? 'linear-gradient(135deg, #e0c168, #c9a84c)' : 'transparent'
-              }}
-            >
-              <span style={{ fontSize: 13 }}>{item.icon}</span>
-              <span>{item.shortLabel}</span>
-            </Link>
-          );
-        })}
-
+        {/* Left Arrow Button (<) */}
         <button
-          onClick={() => setQrModalOpen(true)}
+          type="button"
+          onClick={() => scrollDockBy(-300)}
+          title="Cuộn sang trái (Hoặc giữ chuột kéo thanh tính năng)"
           style={{
+            flexShrink: 0,
+            width: 32,
+            height: 32,
+            borderRadius: 999,
+            border: '1.5px solid #c9a84c',
+            background: 'linear-gradient(135deg, #e0c168, #b88928)',
+            color: '#0B0C10',
+            fontSize: 15,
+            fontWeight: 900,
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 5,
-            padding: '7px 11px',
-            borderRadius: 999,
-            border: '1px solid rgba(239,83,80,0.55)',
-            background: 'rgba(211,47,47,0.22)',
-            color: '#FFCDD2',
-            fontSize: 11.5,
-            fontWeight: 800,
-            whiteSpace: 'nowrap',
-            cursor: 'pointer'
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.45)'
           }}
         >
-          <span>🧧 Gieo Duyên QR</span>
+          ‹
         </button>
 
-        <a
-          href={config.zaloUrl}
-          target="_blank"
-          rel="noreferrer"
+        {/* Draggable & Wheel-Scrollable Feature Strip */}
+        <div
+          ref={dockScrollRef}
+          className="hhd-dock-scroll-strip"
+          onMouseDown={handleDockMouseDown}
+          onMouseMove={handleDockMouseMove}
+          onMouseUp={handleDockMouseUpOrLeave}
+          onMouseLeave={handleDockMouseUpOrLeave}
+          onClickCapture={handleDockClickCapture}
+          onWheel={handleDockWheel}
+          title="Giữ chuột kéo qua lại hoặc lăn con lăn chuột để chọn tính năng"
           style={{
-            display: 'inline-flex',
+            flex: 1,
+            minWidth: 0,
+            display: 'flex',
             alignItems: 'center',
-            gap: 5,
-            padding: '7px 11px',
-            borderRadius: 999,
-            border: '1px solid rgba(102,187,106,0.45)',
-            background: 'rgba(67,160,71,0.18)',
-            color: '#81C784',
-            fontSize: 11.5,
-            fontWeight: 700,
-            whiteSpace: 'nowrap',
-            textDecoration: 'none'
+            gap: 4,
+            overflowX: 'auto',
+            cursor: isDraggingDock ? 'grabbing' : 'grab',
+            userSelect: 'none',
+            WebkitUserSelect: 'none'
           }}
         >
-          <span>💬 Zalo K94: {config.hotlineDisplay}</span>
-        </a>
+          {HHD_FEATURES.map((item) => {
+            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                draggable={false}
+                style={{
+                  flexShrink: 0,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 5,
+                  padding: '7px 11px',
+                  borderRadius: 999,
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap',
+                  fontSize: 11.5,
+                  fontWeight: isActive ? 700 : 500,
+                  color: isActive ? '#0B0C10' : '#E8D5A3',
+                  background: isActive ? 'linear-gradient(135deg, #e0c168, #c9a84c)' : 'transparent',
+                  border: isActive ? '1px solid #F4E3B2' : '1px solid transparent'
+                }}
+              >
+                <span style={{ fontSize: 13 }}>{item.icon}</span>
+                <span>{item.shortLabel}</span>
+              </Link>
+            );
+          })}
+
+          <button
+            type="button"
+            onClick={() => setQrModalOpen(true)}
+            style={{
+              flexShrink: 0,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 5,
+              padding: '7px 11px',
+              borderRadius: 999,
+              border: '1px solid rgba(239,83,80,0.55)',
+              background: 'rgba(211,47,47,0.22)',
+              color: '#FFCDD2',
+              fontSize: 11.5,
+              fontWeight: 800,
+              whiteSpace: 'nowrap',
+              cursor: 'pointer'
+            }}
+          >
+            <span>🧧 Gieo Duyên QR</span>
+          </button>
+
+          <a
+            href={config.zaloUrl}
+            target="_blank"
+            rel="noreferrer"
+            draggable={false}
+            style={{
+              flexShrink: 0,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 5,
+              padding: '7px 11px',
+              borderRadius: 999,
+              border: '1px solid rgba(102,187,106,0.45)',
+              background: 'rgba(67,160,71,0.18)',
+              color: '#81C784',
+              fontSize: 11.5,
+              fontWeight: 700,
+              whiteSpace: 'nowrap',
+              textDecoration: 'none'
+            }}
+          >
+            <span>💬 Zalo K94: {config.hotlineDisplay}</span>
+          </a>
+        </div>
+
+        {/* Right Arrow Button (>) */}
+        <button
+          type="button"
+          onClick={() => scrollDockBy(300)}
+          title="Cuộn sang phải (Hoặc giữ chuột kéo thanh tính năng)"
+          style={{
+            flexShrink: 0,
+            width: 32,
+            height: 32,
+            borderRadius: 999,
+            border: '1.5px solid #c9a84c',
+            background: 'linear-gradient(135deg, #e0c168, #b88928)',
+            color: '#0B0C10',
+            fontSize: 15,
+            fontWeight: 900,
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.45)'
+          }}
+        >
+          ›
+        </button>
       </div>
     </>
   );
