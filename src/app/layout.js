@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('ziwei-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();`,
+            __html: `(function(){try{var ht=localStorage.getItem('hhd_color_theme_v1')||'huyen-vu';document.documentElement.setAttribute('data-hhd-theme',ht);var t=ht==='giay-do'?'light':(localStorage.getItem('ziwei-theme')||'dark');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
           }}
         />
       </head>
