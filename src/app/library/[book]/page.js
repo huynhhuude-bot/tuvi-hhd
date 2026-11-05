@@ -2,6 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BOOKS_DATA, BOOKS_VI_META } from '../../../data/encyclopediaData';
 
+export async function generateStaticParams() {
+  return BOOKS_DATA.map((b) => ({ book: b.slug }));
+}
+
 export async function generateMetadata({ params }) {
   const { book: bookSlug } = await params;
   const book = BOOKS_DATA.find((b) => b.slug === bookSlug);

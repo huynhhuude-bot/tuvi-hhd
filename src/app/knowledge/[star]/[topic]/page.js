@@ -7,6 +7,16 @@ import {
   parseArticleSections,
 } from '../../../../data/encyclopediaData';
 
+export async function generateStaticParams() {
+  const params = [];
+  for (const s of STARS_LIST) {
+    for (const t of TOPICS_LIST) {
+      params.push({ star: s.slug, topic: t.slug });
+    }
+  }
+  return params;
+}
+
 export async function generateMetadata({ params }) {
   const { star: starSlug, topic: topicSlug } = await params;
   const star = STARS_LIST.find((s) => s.slug === starSlug);

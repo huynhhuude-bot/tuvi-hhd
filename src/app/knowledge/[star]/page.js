@@ -8,6 +8,10 @@ import {
   parseArticleSections,
 } from '../../../data/encyclopediaData';
 
+export async function generateStaticParams() {
+  return STARS_LIST.map((s) => ({ star: s.slug }));
+}
+
 export async function generateMetadata({ params }) {
   const { star: starSlug } = await params;
   const star = STARS_LIST.find((s) => s.slug === starSlug);

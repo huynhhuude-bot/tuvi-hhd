@@ -2,6 +2,16 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BOOKS_DATA, BOOKS_VI_META } from '../../../../data/encyclopediaData';
 
+export async function generateStaticParams() {
+  const params = [];
+  for (const b of BOOKS_DATA) {
+    for (let idx = 0; idx < b.chapters.length; idx++) {
+      params.push({ book: b.slug, chapter: String(idx) });
+    }
+  }
+  return params;
+}
+
 export async function generateMetadata({ params }) {
   const { book: bookSlug, chapter: chapterIdxStr } = await params;
   const book = BOOKS_DATA.find((b) => b.slug === bookSlug);
