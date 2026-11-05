@@ -3,9 +3,9 @@ import { ThemeProvider } from '../lib/turbopackShim';
 import HhdNavigationDock from '../components/HhdNavigationDock';
 
 export const metadata = {
-  title: 'HHD · Tử Vi Đẩu Số Chính Tông | Lập Lá Số, Luận Giải AI & Bách Khoa 14 Chính Tinh',
+  title: 'HHD · Tử Vi Đẩu Số Chính Tông | Công ty Truyền thông K94 - 0983.339.397',
   description:
-    'Hệ thống Tử Vi Đẩu Số HHD chính tông: Lập lá số theo Chân thái dương thời 63 tỉnh thành Việt Nam (UTC+7), Bách khoa 14 Chính Tinh × 13 Chủ đề, 24 Bộ Song Tinh Đồng Cung, Tàng Kinh Các nguyên bản Hán văn & Trợ lý AI HHD luận giải chuyên sâu.',
+    'Hệ thống Tử Vi Đẩu Số & Huyền Học HHD (Công ty Truyền thông K94 - ĐT: 0983339397): Lập lá số theo Chân thái dương thời 63 tỉnh thành Việt Nam, Khai Quẻ Kinh Dịch, Xin Chữ Ông Đồ, Lắc Xăm Cổ, Lịch Vạn Niên, Chấm Điểm Tên & La Bàn Bát Trạch miễn phí 100%.',
   icons: {
     icon: '/icon.svg',
   },

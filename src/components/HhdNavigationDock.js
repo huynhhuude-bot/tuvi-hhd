@@ -11,7 +11,7 @@ const HHD_FEATURES = [
     shortLabel: 'Lá Số Tử Vi',
     title: 'Tử Vi Đẩu Số HHD',
     subtitle: 'Lập lá số Chân Thái Dương Thời, AI Luận Giải 4 tầng & Hợp Hôn',
-    badge: 'Chính Tông'
+    badge: 'Miễn Phí'
   },
   {
     href: '/divination',
@@ -70,6 +70,77 @@ export default function HhdNavigationDock() {
 
   return (
     <>
+      {/* Global K94 Media Contact Footer Banner */}
+      <div
+        style={{
+          background: 'linear-gradient(180deg, rgba(11,12,16,0.96) 0%, #07080C 100%)',
+          borderTop: '1px solid rgba(201,168,76,0.32)',
+          padding: '28px 20px 96px',
+          textAlign: 'center',
+          color: '#E2E4E9',
+          fontFamily: 'var(--font-sans, sans-serif)'
+        }}
+      >
+        <div style={{ maxWidth: 880, margin: '0 auto' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '5px 16px',
+              borderRadius: 999,
+              background: 'rgba(201,168,76,0.14)',
+              border: '1px solid rgba(201,168,76,0.4)',
+              color: '#F4E3B2',
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: 1,
+              marginBottom: 10
+            }}
+          >
+            <span>✦ ĐƠN VỊ PHÁT TRIỂN & BẢN QUYỀN: CÔNG TY TRUYỀN THÔNG K94 ✦</span>
+          </div>
+
+          <div style={{ fontSize: 18, fontWeight: 700, color: '#F4E3B2', marginBottom: 6 }}>
+            Hệ Thống Tử Vi & Huyền Học HHD — Công ty Truyền thông K94
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
+            <a
+              href="tel:0983339397"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '9px 20px',
+                borderRadius: 999,
+                background: 'linear-gradient(135deg, #e0c168, #b88928)',
+                color: '#0B0C10',
+                fontWeight: 800,
+                fontSize: 14,
+                textDecoration: 'none',
+                boxShadow: '0 6px 20px rgba(201,168,76,0.35)'
+              }}
+            >
+              <span>📞 Hotline / Zalo: 0983.339.397 (0983339397)</span>
+            </a>
+            <span
+              style={{
+                padding: '8px 16px',
+                borderRadius: 999,
+                border: '1px solid rgba(102,187,106,0.4)',
+                background: 'rgba(67,160,71,0.14)',
+                color: '#81C784',
+                fontSize: 13,
+                fontWeight: 700
+              }}
+            >
+              ✓ Miễn Phí 100% · Mở Trực Tiếp Không Cần Mật Khẩu
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Modal Drawer showcasing all HHD Metaphysics Features */}
       {drawerOpen && (
         <div
@@ -101,10 +172,10 @@ export default function HhdNavigationDock() {
               color: '#E2E4E9'
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
               <div>
                 <div style={{ fontSize: 11, color: '#c9a84c', letterSpacing: 1.5, textTransform: 'uppercase' }}>
-                  HỆ SINH THÁI VĂN HÓA HUYỀN HỌC PHƯƠNG ĐÔNG
+                  CÔNG TY TRUYỀN THÔNG K94 · HOTLINE: 0983.339.397 · MIỄN PHÍ 100%
                 </div>
                 <h2 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 26, color: '#F4E3B2', margin: '4px 0 0 0' }}>
                   Trọn Bộ Pháp Khí Phong Thủy & Bói Toán HHD
@@ -177,12 +248,12 @@ export default function HhdNavigationDock() {
       <div
         style={{
           position: 'fixed',
-          bottom: 14,
+          bottom: 12,
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 9990,
           maxWidth: '96vw',
-          background: 'rgba(13, 15, 22, 0.92)',
+          background: 'rgba(13, 15, 22, 0.94)',
           backdropFilter: 'blur(14px)',
           border: '1px solid rgba(201, 168, 76, 0.45)',
           borderRadius: 999,
@@ -204,22 +275,43 @@ export default function HhdNavigationDock() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6,
-                padding: '7px 12px',
+                padding: '7px 11px',
                 borderRadius: 999,
                 textDecoration: 'none',
                 whiteSpace: 'nowrap',
-                fontSize: 12.5,
+                fontSize: 12,
                 fontWeight: isActive ? 700 : 500,
                 color: isActive ? '#0B0C10' : '#E8D5A3',
                 background: isActive ? 'linear-gradient(135deg, #e0c168, #c9a84c)' : 'transparent',
                 transition: 'all 0.18s ease'
               }}
             >
-              <span style={{ fontSize: 14 }}>{item.icon}</span>
+              <span style={{ fontSize: 13.5 }}>{item.icon}</span>
               <span>{item.shortLabel}</span>
             </Link>
           );
         })}
+
+        <a
+          href="tel:0983339397"
+          title="Công ty Truyền thông K94 - ĐT: 0983339397"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5,
+            padding: '7px 11px',
+            borderRadius: 999,
+            border: '1px solid rgba(102,187,106,0.45)',
+            background: 'rgba(67,160,71,0.18)',
+            color: '#81C784',
+            fontSize: 11.5,
+            fontWeight: 700,
+            whiteSpace: 'nowrap',
+            textDecoration: 'none'
+          }}
+        >
+          <span>📞 K94: 0983.339.397</span>
+        </a>
 
         <button
           onClick={() => setDrawerOpen((v) => !v)}
@@ -228,7 +320,7 @@ export default function HhdNavigationDock() {
             display: 'inline-flex',
             alignItems: 'center',
             gap: 5,
-            padding: '7px 12px',
+            padding: '7px 11px',
             borderRadius: 999,
             border: '1px solid rgba(201,168,76,0.45)',
             background: 'rgba(201,168,76,0.16)',

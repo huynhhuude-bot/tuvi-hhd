@@ -520,7 +520,7 @@ export default function CalligraphyPage() {
                       border: `1px solid ${paper.sealText}`,
                     }}
                   >
-                    ẤN CHƯƠNG HHD ĐẨU SỐ
+                    ẤN CHƯƠNG HHD · CTY K94 · 0983.339.397
                   </div>
                 </div>
 

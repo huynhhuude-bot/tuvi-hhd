@@ -77,7 +77,7 @@ export default function Page() {
                 marginBottom: 12
               }}
             >
-              Không Gian Văn Hóa & Huyền Học Phương Đông HHD
+              Không Gian Văn Hóa & Huyền Học Phương Đông HHD · Cty Truyền Thông K94 (0983.339.397)
             </div>
             <h2
               style={{
