@@ -7,13 +7,33 @@ import {
   VIETQR_BANKS,
   loadMonetizationConfig,
   saveMonetizationConfig,
-  buildVietQrUrl
+  buildVietQrUrl,
+  isAdminAuthenticated,
+  verifyAndLoginAdmin,
+  logoutAdmin,
+  getLockoutState,
+  changeAdminCredentials
 } from '../../data/monetizationData';
 
 export default function QuanLyKiemTienPage() {
   const [config, setConfig] = useState(DEFAULT_MONETIZATION_CONFIG);
-  const [activeTab, setActiveTab] = useState('affiliate'); // 'affiliate' | 'banners' | 'vietqr'
+  const [activeTab, setActiveTab] = useState('affiliate'); // 'affiliate' | 'banners' | 'vietqr' | 'security'
   const [savedToast, setSavedToast] = useState(false);
+
+  // Admin Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginPin, setLoginPin] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [lockoutSeconds, setLockoutSeconds] = useState(0);
+
+  // Change Password / PIN State
+  const [currentPassInput, setCurrentPassInput] = useState('');
+  const [newPassInput, setNewPassInput] = useState('');
+  const [newPinInput, setNewPinInput] = useState('');
+  const [secMessage, setSecMessage] = useState({ type: '', text: '' });
 
   // New Product form
   const [newProd, setNewProd] = useState({
@@ -30,7 +50,97 @@ export default function QuanLyKiemTienPage() {
 
   useEffect(() => {
     setConfig(loadMonetizationConfig());
+    const authed = isAdminAuthenticated();
+    setIsAuthenticated(authed);
+    setAuthChecked(true);
+    const lock = getLockoutState();
+    setLockoutSeconds(lock.remainingSeconds || 0);
   }, []);
+
+  // Countdown timer when brute-force lockout is active
+  useEffect(() => {
+    if (lockoutSeconds <= 0) return;
+    const timer = setInterval(() => {
+      const lock = getLockoutState();
+      setLockoutSeconds(lock.remainingSeconds || 0);
+      if (lock.remainingSeconds <= 0) {
+        setLoginError('');
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lockoutSeconds]);
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    const res = verifyAndLoginAdmin(loginPassword, loginPin);
+    if (res.ok) {
+      setIsAuthenticated(true);
+      setLoginError('');
+      setLoginPassword('');
+      setLoginPin('');
+    } else {
+      setLoginError(res.error || 'Xác thực thất bại!');
+      const lock = getLockoutState();
+      setLockoutSeconds(lock.remainingSeconds || 0);
+    }
+  };
+
+  const handleLogout = () => {
+    logoutAdmin();
+    setIsAuthenticated(false);
+    setLoginPassword('');
+    setLoginPin('');
+    setLoginError('');
+  };
+
+  const handleChangeCredentials = (e) => {
+    e.preventDefault();
+    const res = changeAdminCredentials(currentPassInput, newPassInput, newPinInput);
+    if (res.ok) {
+      setSecMessage({
+        type: 'success',
+        text: '✓ Đã cập nhật Mật khẩu Quản trị & Mã PIN 6 số thành công!'
+      });
+      setCurrentPassInput('');
+      setNewPassInput('');
+      setNewPinInput('');
+    } else {
+      setSecMessage({
+        type: 'error',
+        text: res.error || 'Không thể đổi mật khẩu.'
+      });
+    }
+  };
+
+  const handleExportJson = () => {
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'k94-monetization-config.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportJson = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const parsed = JSON.parse(String(ev.target?.result || '{}'));
+        if (parsed && Array.isArray(parsed.products)) {
+          setConfig(parsed);
+          saveMonetizationConfig(parsed);
+          setSavedToast(true);
+          setTimeout(() => setSavedToast(false), 2500);
+        }
+      } catch {
+        alert('File cấu hình JSON không hợp lệ!');
+      }
+    };
+    reader.readAsText(file);
+  };
 
   const handleSave = (nextCfg = config) => {
     saveMonetizationConfig(nextCfg);
@@ -89,6 +199,201 @@ export default function QuanLyKiemTienPage() {
     setTimeout(() => setSavedToast(false), 2500);
   };
 
+  if (!authChecked) {
+    return <div style={{ minHeight: '100vh', background: '#0B0C10' }} />;
+  }
+
+  // ==========================================================================
+  // 2-FACTOR SECURITY GATE (Renders when not authenticated)
+  // ==========================================================================
+  if (!isAuthenticated) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          background: 'radial-gradient(circle at top, #1A1610 0%, #090A0F 70%)',
+          color: '#E2E4E9',
+          fontFamily: 'var(--font-sans, sans-serif)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 20
+        }}
+      >
+        <div
+          style={{
+            width: '100%',
+            maxWidth: 460,
+            background: 'rgba(18, 20, 28, 0.96)',
+            border: '1.5px solid rgba(201, 168, 76, 0.5)',
+            borderRadius: 24,
+            padding: '34px 28px',
+            boxShadow: '0 24px 64px rgba(0, 0, 0, 0.85)'
+          }}
+        >
+          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+            <div
+              style={{
+                width: 60,
+                height: 60,
+                margin: '0 auto 14px',
+                borderRadius: 16,
+                background: 'linear-gradient(135deg, rgba(201,168,76,0.25), rgba(201,168,76,0.06))',
+                border: '1px solid #c9a84c',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 28
+              }}
+            >
+              🔐
+            </div>
+            <div
+              style={{
+                display: 'inline-block',
+                padding: '3px 12px',
+                borderRadius: 99,
+                background: 'rgba(229, 57, 53, 0.16)',
+                border: '1px solid rgba(229, 57, 53, 0.4)',
+                color: '#FF8A80',
+                fontSize: 11,
+                fontWeight: 800,
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                marginBottom: 8
+              }}
+            >
+              Khu Vực Quản Trị Bảo Mật 2 Lớp (SHA-256)
+            </div>
+            <h1 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 24, color: '#F4E3B2', margin: '0 0 6px' }}>
+              Xác Thực Admin Công Ty K94
+            </h1>
+            <p style={{ fontSize: 13, color: '#9DA3B4', margin: 0, lineHeight: 1.5 }}>
+              Trang cấu hình Link Affiliate, Banner Quảng Cáo & Tài Khoản Ngân Hàng chỉ dành riêng cho Quản trị viên K94 Media.
+            </p>
+          </div>
+
+          <form onSubmit={handleLoginSubmit} style={{ display: 'grid', gap: 16 }}>
+            <div>
+              <label style={{ display: 'block', fontSize: 12, color: '#c9a84c', fontWeight: 700, marginBottom: 6 }}>
+                1. MẬT KHẨU QUẢN TRỊ ADMIN
+              </label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  disabled={lockoutSeconds > 0}
+                  placeholder="Nhập mật khẩu Quản trị K94..."
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '12px 44px 12px 14px',
+                    borderRadius: 12,
+                    border: '1px solid rgba(201,168,76,0.4)',
+                    background: '#0E1017',
+                    color: '#F4E3B2',
+                    fontSize: 14
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: '#9DA3B4',
+                    cursor: 'pointer',
+                    fontSize: 13
+                  }}
+                >
+                  {showPassword ? '🙈' : '👁'}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: 12, color: '#c9a84c', fontWeight: 700, marginBottom: 6 }}>
+                2. MÃ PIN BẢO MẬT (6 CHỮ SỐ)
+              </label>
+              <input
+                type="password"
+                inputMode="numeric"
+                maxLength={6}
+                required
+                disabled={lockoutSeconds > 0}
+                placeholder="••••••"
+                value={loginPin}
+                onChange={(e) => setLoginPin(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: 12,
+                  border: '1px solid rgba(201,168,76,0.4)',
+                  background: '#0E1017',
+                  color: '#FFD54F',
+                  fontSize: 18,
+                  letterSpacing: 6,
+                  fontWeight: 800,
+                  textAlign: 'center'
+                }}
+              />
+            </div>
+
+            {(loginError || lockoutSeconds > 0) && (
+              <div
+                style={{
+                  padding: '10px 14px',
+                  borderRadius: 10,
+                  background: 'rgba(229, 57, 53, 0.16)',
+                  border: '1px solid rgba(229, 57, 53, 0.45)',
+                  color: '#FF8A80',
+                  fontSize: 12.5,
+                  lineHeight: 1.5,
+                  textAlign: 'center'
+                }}
+              >
+                {lockoutSeconds > 0
+                  ? `⛔ Đã khóa chống dò mật khẩu! Vui lòng đợi ${lockoutSeconds} giây nữa.`
+                  : loginError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={lockoutSeconds > 0}
+              style={{
+                padding: '13px 20px',
+                borderRadius: 12,
+                background: lockoutSeconds > 0 ? '#3A3F50' : 'linear-gradient(135deg, #e0c168, #b88928)',
+                color: '#0B0C10',
+                fontWeight: 800,
+                fontSize: 14,
+                border: 'none',
+                cursor: lockoutSeconds > 0 ? 'not-allowed' : 'pointer'
+              }}
+            >
+              🔓 Mở Khóa Bảng Điều Khiển Quản Trị
+            </button>
+          </form>
+
+          <div style={{ marginTop: 20, textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 16 }}>
+            <Link href="/" style={{ color: '#9DA3B4', fontSize: 13, textDecoration: 'none' }}>
+              ← Quay về Trang Chủ HHD Tử Vi
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ==========================================================================
+  // AUTHENTICATED ADMIN DASHBOARD
+  // ==========================================================================
   return (
     <div style={{ minHeight: '100vh', background: '#0B0C10', color: '#E2E4E9', fontFamily: 'var(--font-sans, sans-serif)', paddingBottom: 80 }}>
       <header style={{ borderBottom: '1px solid rgba(201,168,76,0.2)', background: 'rgba(11,12,16,0.92)', backdropFilter: 'blur(10px)', position: 'sticky', top: 0, zIndex: 50 }}>
@@ -116,14 +421,29 @@ export default function QuanLyKiemTienPage() {
             >
               {savedToast ? '✓ Đã Lưu Cấu Hình!' : '💾 Lưu Toàn Bộ Thay Đổi'}
             </button>
+            <button
+              onClick={handleLogout}
+              style={{
+                padding: '8px 14px',
+                borderRadius: 99,
+                background: 'rgba(229, 57, 53, 0.2)',
+                border: '1px solid rgba(229, 57, 53, 0.5)',
+                color: '#FF8A80',
+                fontWeight: 700,
+                fontSize: 12.5,
+                cursor: 'pointer'
+              }}
+            >
+              🔒 Khóa & Đăng Xuất
+            </button>
           </div>
         </div>
       </header>
 
       <main style={{ maxWidth: 1080, margin: '0 auto', padding: '36px 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div style={{ display: 'inline-block', padding: '4px 14px', borderRadius: 999, border: '1px solid rgba(201,168,76,0.35)', color: '#c9a84c', fontSize: 12, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 10 }}>
-            Trung Tâm Kiếm Tiền Không Cần Sửa Code · Công Ty Truyền Thông K94
+          <div style={{ display: 'inline-block', padding: '4px 14px', borderRadius: 999, border: '1px solid rgba(129,199,132,0.45)', background: 'rgba(129,199,132,0.12)', color: '#81C784', fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 10, fontWeight: 700 }}>
+            ✓ Đã Xác Thực Quản Trị Viên K94 Media · Phiên Bảo Mật SHA-256
           </div>
           <h1 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 'clamp(26px, 3.8vw, 38px)', color: '#F4E3B2', margin: '0 0 8px 0' }}>
             Cấu Hình Link Affiliate Shopee/TikTok, Banner Quảng Cáo & QR Nhận Lộc
@@ -133,18 +453,19 @@ export default function QuanLyKiemTienPage() {
           </p>
         </div>
 
-        {/* 3 Management Tabs */}
+        {/* 4 Management Tabs */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 28 }}>
           {[
-            { id: 'affiliate', label: '🛒 1. Quản Lý Sản Phẩm & Link Affiliate (Shopee / TikTok)' },
-            { id: 'banners', label: '📢 2. Quản Lý Banner Quảng Cáo & Dịch Vụ K94 (0983.339.397)' },
-            { id: 'vietqr', label: '🧧 3. Cài Đặt Mã QR Ngân Hàng Nhận Lộc / Gieo Duyên' }
+            { id: 'affiliate', label: '🛒 1. Sản Phẩm & Link Affiliate' },
+            { id: 'banners', label: '📢 2. Banner Quảng Cáo K94' },
+            { id: 'vietqr', label: '🧧 3. Mã QR Ngân Hàng Nhận Lộc' },
+            { id: 'security', label: '🔐 4. Đổi Mật Khẩu / PIN & Sao Lưu' }
           ].map((t) => (
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
               style={{
-                padding: '11px 20px',
+                padding: '11px 18px',
                 borderRadius: 999,
                 border: activeTab === t.id ? '1px solid #c9a84c' : '1px solid rgba(255,255,255,0.12)',
                 background: activeTab === t.id ? 'rgba(201,168,76,0.22)' : '#141722',
@@ -162,7 +483,6 @@ export default function QuanLyKiemTienPage() {
         {/* TAB 1: AFFILIATE PRODUCTS */}
         {activeTab === 'affiliate' && (
           <div style={{ display: 'grid', gap: 24 }}>
-            {/* Add New Product Box */}
             <div style={{ background: 'rgba(20,22,30,0.9)', border: '1px solid rgba(102,187,106,0.4)', borderRadius: 20, padding: 24 }}>
               <h3 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 20, color: '#81C784', margin: '0 0 14px 0' }}>
                 ➕ Thêm Nhanh Sản Phẩm Affiliate Mới
@@ -216,7 +536,6 @@ export default function QuanLyKiemTienPage() {
               </button>
             </div>
 
-            {/* Existing Products List */}
             <div style={{ display: 'grid', gap: 14 }}>
               {config.products.map((p, idx) => (
                 <div key={p.id} style={{ background: 'rgba(20,22,30,0.88)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 16, padding: 20 }}>
@@ -231,7 +550,7 @@ export default function QuanLyKiemTienPage() {
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
                     <div>
-                      <label style={{ fontSize: 11, color: '#FF8A65', display: 'block', marginBottom: 4 }}>Link Affiliate Shopee (Dán link rút gọn s.shopee.vn của anh):</label>
+                      <label style={{ fontSize: 11, color: '#FF8A65', display: 'block', marginBottom: 4 }}>Link Affiliate Shopee (Dán link rút gọn s.shopee.vn):</label>
                       <input
                         type="text"
                         value={p.shopeeUrl}
@@ -351,7 +670,6 @@ export default function QuanLyKiemTienPage() {
               </button>
             </div>
 
-            {/* Live VietQR Preview */}
             <div style={{ background: 'rgba(20,22,30,0.9)', border: '1px solid rgba(201,168,76,0.4)', borderRadius: 22, padding: 26, textAlign: 'center' }}>
               <div style={{ fontSize: 12, color: '#c9a84c', fontWeight: 700, marginBottom: 10 }}>XEM TRƯỚC MÃ QR GIEO DUYÊN NHẬN LỘC</div>
               <img
@@ -367,14 +685,149 @@ export default function QuanLyKiemTienPage() {
           </div>
         )}
 
-        <div style={{ marginTop: 28, textAlign: 'right' }}>
-          <button
-            onClick={resetDefaults}
-            style={{ padding: '8px 14px', borderRadius: 8, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: '#8C93A8', fontSize: 12, cursor: 'pointer' }}
-          >
-            Khôi phục danh sách mẫu ban đầu
-          </button>
-        </div>
+        {/* TAB 4: SECURITY, CHANGE PASSWORD/PIN & BACKUP JSON */}
+        {activeTab === 'security' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
+            <form
+              onSubmit={handleChangeCredentials}
+              style={{
+                background: 'rgba(20,22,30,0.9)',
+                border: '1px solid rgba(201,168,76,0.35)',
+                borderRadius: 20,
+                padding: 24,
+                display: 'grid',
+                gap: 14
+              }}
+            >
+              <div style={{ fontSize: 14, color: '#c9a84c', fontWeight: 800 }}>
+                🔐 ĐỔI MẬT KHẨU QUẢN TRỊ & MÃ PIN 6 SỐ (MÃ HÓA SHA-256)
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, color: '#9DA3B4', marginBottom: 4 }}>Mật khẩu Quản trị hiện tại</label>
+                <input
+                  type="password"
+                  required
+                  value={currentPassInput}
+                  onChange={(e) => setCurrentPassInput(e.target.value)}
+                  placeholder="Nhập mật khẩu đang dùng..."
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#F4E3B2' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, color: '#9DA3B4', marginBottom: 4 }}>Mật khẩu Quản trị mới (Tối thiểu 6 ký tự)</label>
+                <input
+                  type="password"
+                  required
+                  value={newPassInput}
+                  onChange={(e) => setNewPassInput(e.target.value)}
+                  placeholder="Nhập mật khẩu mới..."
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#F4E3B2' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, color: '#9DA3B4', marginBottom: 4 }}>Mã PIN 6 chữ số mới</label>
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  maxLength={6}
+                  required
+                  value={newPinInput}
+                  onChange={(e) => setNewPinInput(e.target.value)}
+                  placeholder="VD: 888999"
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#FFD54F', fontWeight: 800, letterSpacing: 4 }}
+                />
+              </div>
+
+              {secMessage.text && (
+                <div
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: 10,
+                    background: secMessage.type === 'success' ? 'rgba(102,187,106,0.16)' : 'rgba(229,57,53,0.16)',
+                    border: secMessage.type === 'success' ? '1px solid #66BB6A' : '1px solid #EF5350',
+                    color: secMessage.type === 'success' ? '#81C784' : '#FF8A80',
+                    fontSize: 12.5
+                  }}
+                >
+                  {secMessage.text}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                style={{ padding: '12px 18px', borderRadius: 12, background: 'linear-gradient(135deg, #e0c168, #b88928)', color: '#0B0C10', fontWeight: 800, border: 'none', cursor: 'pointer' }}
+              >
+                🔑 Cập Nhật Mật Khẩu & Mã PIN Mới
+              </button>
+            </form>
+
+            {/* Backup & Restore JSON */}
+            <div
+              style={{
+                background: 'rgba(20,22,30,0.9)',
+                border: '1px solid rgba(201,168,76,0.35)',
+                borderRadius: 20,
+                padding: 24,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: 16
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 14, color: '#c9a84c', fontWeight: 800, marginBottom: 8 }}>
+                  📦 SAO LƯU & KHÔI PHỤC CẤU HÌNH (JSON)
+                </div>
+                <p style={{ fontSize: 13, color: '#9DA3B4', lineHeight: 1.6, margin: '0 0 16px' }}>
+                  Tải xuống toàn bộ danh sách sản phẩm Affiliate, link Shopee/TikTok, Banner quảng cáo K94 và thông tin VietQR thành file <code>k94-monetization-config.json</code> để sao lưu hoặc chuyển sang máy tính/điện thoại khác.
+                </p>
+                <div style={{ display: 'grid', gap: 12 }}>
+                  <button
+                    type="button"
+                    onClick={handleExportJson}
+                    style={{ padding: '11px 16px', borderRadius: 10, background: 'rgba(201,168,76,0.18)', border: '1px solid #c9a84c', color: '#F4E3B2', fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    ⬇️ Tải File Sao Lưu Cấu Hình (.JSON)
+                  </button>
+                  <label
+                    style={{
+                      display: 'block',
+                      textAlign: 'center',
+                      padding: '11px 16px',
+                      borderRadius: 10,
+                      background: 'rgba(255,255,255,0.06)',
+                      border: '1px dashed rgba(255,255,255,0.25)',
+                      color: '#E2E4E9',
+                      fontSize: 13,
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    ⬆️ Nhập File Cấu Hình (.JSON) Từ Máy
+                    <input type="file" accept=".json" onChange={handleImportJson} style={{ display: 'none' }} />
+                  </label>
+                </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <button
+                  type="button"
+                  onClick={resetDefaults}
+                  style={{ padding: '8px 12px', borderRadius: 8, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: '#8C93A8', fontSize: 12, cursor: 'pointer' }}
+                >
+                  Khôi phục danh sách gốc
+                </button>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  style={{ padding: '8px 14px', borderRadius: 8, background: 'rgba(229,57,53,0.2)', border: '1px solid #EF5350', color: '#FF8A80', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                >
+                  🔒 Đăng Xuất Ngay
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

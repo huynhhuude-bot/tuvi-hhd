@@ -6,7 +6,8 @@ import { usePathname } from 'next/navigation';
 import {
   DEFAULT_MONETIZATION_CONFIG,
   loadMonetizationConfig,
-  buildVietQrUrl
+  buildVietQrUrl,
+  isAdminAuthenticated
 } from '../data/monetizationData';
 
 const HHD_FEATURES = [
@@ -138,17 +139,24 @@ export default function HhdNavigationDock() {
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [config, setConfig] = useState(DEFAULT_MONETIZATION_CONFIG);
   const [selectedAmount, setSelectedAmount] = useState(68000);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const loaded = loadMonetizationConfig();
     setConfig(loaded);
     setSelectedAmount(loaded.donation?.defaultAmount || 68000);
+    setIsAdmin(isAdminAuthenticated());
     const onUpdate = () => {
       const next = loadMonetizationConfig();
       setConfig(next);
     };
+    const onAuthChange = () => setIsAdmin(isAdminAuthenticated());
     window.addEventListener('hhd-monetization-updated', onUpdate);
-    return () => window.removeEventListener('hhd-monetization-updated', onUpdate);
+    window.addEventListener('hhd-admin-auth-changed', onAuthChange);
+    return () => {
+      window.removeEventListener('hhd-monetization-updated', onUpdate);
+      window.removeEventListener('hhd-admin-auth-changed', onAuthChange);
+    };
   }, []);
 
   const featuredProducts = (config.products || []).slice(0, 4);
@@ -194,19 +202,21 @@ export default function HhdNavigationDock() {
                   >
                     🛍 Xem Tất Cả Vật Phẩm Hợp Mệnh →
                   </Link>
-                  <Link
-                    href="/quan-ly-kiem-tien"
-                    style={{
-                      padding: '8px 14px',
-                      borderRadius: 99,
-                      border: '1px solid rgba(255,255,255,0.15)',
-                      color: '#9DA3B4',
-                      fontSize: 12,
-                      textDecoration: 'none'
-                    }}
-                  >
-                    ⚙️ Sửa Link Affiliate
-                  </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/quan-ly-kiem-tien"
+                      style={{
+                        padding: '8px 14px',
+                        borderRadius: 99,
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        color: '#9DA3B4',
+                        fontSize: 12,
+                        textDecoration: 'none'
+                      }}
+                    >
+                      ⚙️ Sửa Link Affiliate (Admin)
+                    </Link>
+                  )}
                 </div>
               </div>
 
@@ -398,24 +408,45 @@ export default function HhdNavigationDock() {
                 <span>🧧 Gieo Duyên Nhận Lộc / Mời Trà Ông Đồ (QR)</span>
               </button>
 
-              <Link
-                href="/quan-ly-kiem-tien"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  padding: '9px 16px',
-                  borderRadius: 999,
-                  border: '1px solid rgba(201,168,76,0.4)',
-                  background: 'rgba(255,255,255,0.04)',
-                  color: '#E8D5A3',
-                  fontWeight: 700,
-                  fontSize: 13,
-                  textDecoration: 'none'
-                }}
-              >
-                <span>⚙️ Quản Trị Kiếm Tiền & Link Aff</span>
-              </Link>
+              {isAdmin ? (
+                <Link
+                  href="/quan-ly-kiem-tien"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    padding: '9px 16px',
+                    borderRadius: 999,
+                    border: '1px solid rgba(129,199,132,0.5)',
+                    background: 'rgba(129,199,132,0.14)',
+                    color: '#81C784',
+                    fontWeight: 700,
+                    fontSize: 13,
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>🔓 Quản Trị Admin K94 (Đang Mở)</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/quan-ly-kiem-tien"
+                  title="Cổng Quản Trị Nội Bộ K94 Media (Yêu cầu Mật khẩu & Mã PIN)"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    padding: '6px 10px',
+                    borderRadius: 999,
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.02)',
+                    color: '#5C6479',
+                    fontSize: 11,
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>🔒 Admin</span>
+                </Link>
+              )}
             </div>
           </div>
         </div>

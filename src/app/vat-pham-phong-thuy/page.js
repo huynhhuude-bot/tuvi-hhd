@@ -4,7 +4,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
   DEFAULT_MONETIZATION_CONFIG,
-  loadMonetizationConfig
+  loadMonetizationConfig,
+  isAdminAuthenticated
 } from '../../data/monetizationData';
 
 const ELEMENT_COLORS = {
@@ -38,12 +39,19 @@ export default function VatPhamPhongThuyPage() {
   const [config, setConfig] = useState(DEFAULT_MONETIZATION_CONFIG);
   const [birthYear, setBirthYear] = useState(1994);
   const [selectedElement, setSelectedElement] = useState('ALL');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     setConfig(loadMonetizationConfig());
+    setIsAdmin(isAdminAuthenticated());
     const onUpdate = () => setConfig(loadMonetizationConfig());
+    const onAuthChange = () => setIsAdmin(isAdminAuthenticated());
     window.addEventListener('hhd-monetization-updated', onUpdate);
-    return () => window.removeEventListener('hhd-monetization-updated', onUpdate);
+    window.addEventListener('hhd-admin-auth-changed', onAuthChange);
+    return () => {
+      window.removeEventListener('hhd-monetization-updated', onUpdate);
+      window.removeEventListener('hhd-admin-auth-changed', onAuthChange);
+    };
   }, []);
 
   const userElement = useMemo(() => getYearElement(birthYear), [birthYear]);
@@ -64,9 +72,11 @@ export default function VatPhamPhongThuyPage() {
             <span style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 18, fontWeight: 700 }}>HHD Pháp Khí & Vật Phẩm Hộ Mệnh K94</span>
           </Link>
           <div style={{ display: 'flex', gap: 12, fontSize: 13, alignItems: 'center', flexWrap: 'wrap' }}>
-            <Link href="/quan-ly-kiem-tien" style={{ padding: '6px 12px', borderRadius: 99, border: '1px solid rgba(201,168,76,0.45)', background: 'rgba(201,168,76,0.16)', color: '#F4E3B2', fontWeight: 700, textDecoration: 'none' }}>
-              ⚙️ Cài Đặt Link Affiliate & Quảng Cáo
-            </Link>
+            {isAdmin && (
+              <Link href="/quan-ly-kiem-tien" style={{ padding: '6px 12px', borderRadius: 99, border: '1px solid rgba(201,168,76,0.45)', background: 'rgba(201,168,76,0.16)', color: '#F4E3B2', fontWeight: 700, textDecoration: 'none' }}>
+                ⚙️ Cài Đặt Link Affiliate & Quảng Cáo (Admin)
+              </Link>
+            )}
             <a href={config.zaloUrl} target="_blank" rel="noreferrer" style={{ color: '#81C784', fontWeight: 700, textDecoration: 'none' }}>
               💬 Zalo K94: {config.hotlineDisplay}
             </a>

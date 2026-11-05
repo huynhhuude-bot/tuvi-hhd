@@ -214,3 +214,262 @@ export function buildVietQrUrl(donation, customAmount) {
   const accName = encodeURIComponent(donation?.accountName || 'CONG TY TRUYEN THONG K94');
   return `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${amount}&addInfo=${info}&accountName=${accName}`;
 }
+
+// ============================================================================
+// ADMIN SECURITY & AUTHENTICATION (2-Factor: Password + 6-Digit PIN, SHA-256)
+// ============================================================================
+const ADMIN_AUTH_STORAGE_KEY = 'hhd_k94_admin_credentials_v1';
+const ADMIN_SESSION_STORAGE_KEY = 'hhd_k94_admin_session_v1';
+const ADMIN_LOCKOUT_STORAGE_KEY = 'hhd_k94_admin_lockout_v1';
+
+// Default SHA-256 hashes (Password: K94@0983339397 | PIN: 339397)
+const DEFAULT_ADMIN_PASS_HASH = 'ed7854df9bfce7c803994edbe9a0d8dc423326ccb5fee589fb7ceb67b6171c9b';
+const DEFAULT_ADMIN_PIN_HASH = 'd6840b46ba685849fe2f6f2ea98401400948fb7858a0121f8867ae65cc312a76';
+const SESSION_DURATION_MS = 30 * 60 * 1000; // 30 minutes
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+
+// Pure JS SHA-256 implementation (works in both HTTPS and non-HTTPS contexts)
+export function sha256Hex(ascii) {
+  function rightRotate(value, amount) {
+    return (value >>> amount) | (value << (32 - amount));
+  }
+  const mathPow = Math.pow;
+  const maxWord = mathPow(2, 32);
+  const lengthProperty = 'length';
+  let i, j;
+  let result = '';
+  const words = [];
+  const utf8 = unescape(encodeURIComponent(String(ascii)));
+  const asciiBitLength = utf8[lengthProperty] * 8;
+
+  let hash = [];
+  const k = [];
+  let primeCounter = 0;
+
+  const isComposite = {};
+  for (let candidate = 2; primeCounter < 64; candidate++) {
+    if (!isComposite[candidate]) {
+      for (i = 0; i < 313; i += candidate) {
+        isComposite[i] = candidate;
+      }
+      hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+      k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+    }
+  }
+
+  let str = utf8 + '\x80';
+  while ((str[lengthProperty] % 64) - 56) str += '\x00';
+  for (i = 0; i < str[lengthProperty]; i++) {
+    j = str.charCodeAt(i);
+    if (j >> 8) return '';
+    words[i >> 2] |= j << (((3 - i) % 4) * 8);
+  }
+  words[words[lengthProperty]] = (asciiBitLength / maxWord) | 0;
+  words[words[lengthProperty]] = asciiBitLength;
+
+  for (j = 0; j < words[lengthProperty]; ) {
+    const w = words.slice(j, (j += 16));
+    const oldHash = hash;
+    hash = hash.slice(0, 8);
+
+    for (i = 0; i < 64; i++) {
+      const i2 = i + j;
+      const w15 = w[i - 15],
+        w2 = w[i - 2];
+
+      const a = hash[0],
+        e = hash[4];
+      const temp1 =
+        hash[7] +
+        (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) +
+        ((e & hash[5]) ^ (~e & hash[6])) +
+        k[i] +
+        (w[i] =
+          i < 16
+            ? w[i]
+            : (w[i - 16] +
+                (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) +
+                w[i - 7] +
+                (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) |
+              0);
+      const temp2 =
+        (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) +
+        ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+
+      hash = [(temp1 + temp2) | 0].concat(hash);
+      hash[4] = (hash[4] + temp1) | 0;
+    }
+
+    for (i = 0; i < 8; i++) {
+      hash[i] = (hash[i] + oldHash[i]) | 0;
+    }
+  }
+
+  for (i = 0; i < 8; i++) {
+    for (j = 3; j + 1; j--) {
+      const b = (hash[i] >> (j * 8)) & 255;
+      result += (b < 16 ? 0 : '') + b.toString(16);
+    }
+  }
+  return result;
+}
+
+function getStoredHashes() {
+  if (typeof window === 'undefined') {
+    return { passHash: DEFAULT_ADMIN_PASS_HASH, pinHash: DEFAULT_ADMIN_PIN_HASH };
+  }
+  try {
+    const raw = localStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
+    if (!raw) return { passHash: DEFAULT_ADMIN_PASS_HASH, pinHash: DEFAULT_ADMIN_PIN_HASH };
+    const parsed = JSON.parse(raw);
+    return {
+      passHash: parsed.passHash || DEFAULT_ADMIN_PASS_HASH,
+      pinHash: parsed.pinHash || DEFAULT_ADMIN_PIN_HASH
+    };
+  } catch {
+    return { passHash: DEFAULT_ADMIN_PASS_HASH, pinHash: DEFAULT_ADMIN_PIN_HASH };
+  }
+}
+
+export function getLockoutState() {
+  if (typeof window === 'undefined') return { failedAttempts: 0, lockedUntil: 0, remainingSeconds: 0 };
+  try {
+    const raw = localStorage.getItem(ADMIN_LOCKOUT_STORAGE_KEY);
+    if (!raw) return { failedAttempts: 0, lockedUntil: 0, remainingSeconds: 0 };
+    const parsed = JSON.parse(raw);
+    const now = Date.now();
+    if (parsed.lockedUntil && parsed.lockedUntil > now) {
+      return {
+        failedAttempts: parsed.failedAttempts || MAX_FAILED_ATTEMPTS,
+        lockedUntil: parsed.lockedUntil,
+        remainingSeconds: Math.ceil((parsed.lockedUntil - now) / 1000)
+      };
+    }
+    if (parsed.lockedUntil && parsed.lockedUntil <= now) {
+      localStorage.removeItem(ADMIN_LOCKOUT_STORAGE_KEY);
+      return { failedAttempts: 0, lockedUntil: 0, remainingSeconds: 0 };
+    }
+    return {
+      failedAttempts: parsed.failedAttempts || 0,
+      lockedUntil: 0,
+      remainingSeconds: 0
+    };
+  } catch {
+    return { failedAttempts: 0, lockedUntil: 0, remainingSeconds: 0 };
+  }
+}
+
+export function isAdminAuthenticated() {
+  if (typeof window === 'undefined') return false;
+  try {
+    const raw = sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    const { passHash, pinHash } = getStoredHashes();
+    const expectedToken = sha256Hex(`${passHash}:${pinHash}:k94-session`);
+    if (parsed.token !== expectedToken) return false;
+    if (!parsed.expiresAt || Date.now() > parsed.expiresAt) {
+      sessionStorage.removeItem(ADMIN_SESSION_STORAGE_KEY);
+      return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function verifyAndLoginAdmin(password, pin) {
+  if (typeof window === 'undefined') return { ok: false, error: 'Môi trường không hợp lệ.' };
+  const lockout = getLockoutState();
+  if (lockout.remainingSeconds > 0) {
+    return {
+      ok: false,
+      error: `Tài khoản đang tạm khóa chống dò mật khẩu. Vui lòng thử lại sau ${lockout.remainingSeconds} giây.`
+    };
+  }
+
+  const { passHash, pinHash } = getStoredHashes();
+  const inputPassHash = sha256Hex(String(password || '').trim());
+  const inputPinHash = sha256Hex(String(pin || '').trim());
+
+  if (inputPassHash === passHash && inputPinHash === pinHash) {
+    localStorage.removeItem(ADMIN_LOCKOUT_STORAGE_KEY);
+    const token = sha256Hex(`${passHash}:${pinHash}:k94-session`);
+    sessionStorage.setItem(
+      ADMIN_SESSION_STORAGE_KEY,
+      JSON.stringify({
+        token,
+        expiresAt: Date.now() + SESSION_DURATION_MS
+      })
+    );
+    window.dispatchEvent(new Event('hhd-admin-auth-changed'));
+    return { ok: true };
+  }
+
+  const nextAttempts = (lockout.failedAttempts || 0) + 1;
+  const isNowLocked = nextAttempts >= MAX_FAILED_ATTEMPTS;
+  const lockedUntil = isNowLocked ? Date.now() + LOCKOUT_DURATION_MS : 0;
+  localStorage.setItem(
+    ADMIN_LOCKOUT_STORAGE_KEY,
+    JSON.stringify({
+      failedAttempts: nextAttempts,
+      lockedUntil
+    })
+  );
+
+  if (isNowLocked) {
+    return {
+      ok: false,
+      error: 'Nhập sai quá 5 lần! Hệ thống đã tự động khóa bảo vệ trong 5 phút.'
+    };
+  }
+
+  return {
+    ok: false,
+    error: `Mật khẩu Quản trị hoặc Mã PIN 6 số không đúng! (Còn ${MAX_FAILED_ATTEMPTS - nextAttempts} lần thử)`
+  };
+}
+
+export function logoutAdmin() {
+  if (typeof window === 'undefined') return;
+  sessionStorage.removeItem(ADMIN_SESSION_STORAGE_KEY);
+  window.dispatchEvent(new Event('hhd-admin-auth-changed'));
+}
+
+export function changeAdminCredentials(currentPassword, newPassword, newPin) {
+  if (typeof window === 'undefined') return { ok: false, error: 'Lỗi môi trường.' };
+  const { passHash } = getStoredHashes();
+  if (sha256Hex(String(currentPassword || '').trim()) !== passHash) {
+    return { ok: false, error: 'Mật khẩu hiện tại không chính xác!' };
+  }
+  const cleanPass = String(newPassword || '').trim();
+  const cleanPin = String(newPin || '').trim();
+  if (cleanPass.length < 6) {
+    return { ok: false, error: 'Mật khẩu mới phải có ít nhất 6 ký tự!' };
+  }
+  if (!/^\d{6}$/.test(cleanPin)) {
+    return { ok: false, error: 'Mã PIN bảo mật phải gồm đúng 6 chữ số!' };
+  }
+  const nextPassHash = sha256Hex(cleanPass);
+  const nextPinHash = sha256Hex(cleanPin);
+  localStorage.setItem(
+    ADMIN_AUTH_STORAGE_KEY,
+    JSON.stringify({
+      passHash: nextPassHash,
+      pinHash: nextPinHash,
+      updatedAt: new Date().toISOString()
+    })
+  );
+  const token = sha256Hex(`${nextPassHash}:${nextPinHash}:k94-session`);
+  sessionStorage.setItem(
+    ADMIN_SESSION_STORAGE_KEY,
+    JSON.stringify({
+      token,
+      expiresAt: Date.now() + SESSION_DURATION_MS
+    })
+  );
+  window.dispatchEvent(new Event('hhd-admin-auth-changed'));
+  return { ok: true };
+}
+

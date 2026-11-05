@@ -12,13 +12,6 @@ const TWELVE_METAPHYSICS_CARDS = [
     desc: 'Gợi ý vòng đá phong thủy, Tỳ Hưu, Thiềm Thừ, Phật Bản Mệnh, Chuông Đồng và Sim Số Đẹp tự động lọc theo Năm Sinh & Ngũ Hành Bản Mệnh.'
   },
   {
-    href: '/quan-ly-kiem-tien',
-    icon: '💰',
-    tag: 'Dán Link Affiliate · Banner K94 · VietQR',
-    title: 'Quản Trị Link Affiliate, Quảng Cáo & QR Lộc',
-    desc: 'Bảng điều khiển dành cho Admin K94: Tự dán link tiếp thị liên kết Shopee/TikTok Shop, thay đổi 3 Banner Quảng Cáo và cài đặt STK Ngân Hàng tạo mã VietQR.'
-  },
-  {
     href: '/sim-phong-thuy',
     icon: '📱',
     tag: 'Bát Cực Linh Số · 64 Quẻ Dịch',
