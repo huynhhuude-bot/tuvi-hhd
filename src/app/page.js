@@ -5,6 +5,13 @@ import { HomePage } from '../lib/turbopackShim';
 
 const TWELVE_METAPHYSICS_CARDS = [
   {
+    href: '/k94-tools-store',
+    icon: '🚀',
+    tag: 'HHD CapCut · Auto MKT · Web/App · 0983.339.397',
+    title: 'Chợ Tool AI, App & Dịch Vụ Số K94 × Đối Tác',
+    desc: 'Cung cấp Phần mềm HHD CapCut AI, HHD Edit Remotion, Tool Tải & Reup Video Đa Kênh, Chatbot AI Chốt Đơn, App Quản Lý Kho POS, Thiết Kế Web & Quảng Cáo.'
+  },
+  {
     href: '/duc-hai-fishing',
     icon: '🎣',
     tag: 'Ấp Cái Cui, Hòa Hiệp, Vĩnh Long · 0983.339.397',

@@ -1,4 +1,4 @@
-export const MONETIZATION_STORAGE_KEY = 'hhd_k94_monetization_v3';
+export const MONETIZATION_STORAGE_KEY = 'hhd_k94_monetization_v4';
 
 // High-detail SVG Data URIs for Đức Hải Fishing (100% instant load, never broken offline/online)
 export const DUC_HAI_FISHING_BANNER_SVG =
@@ -114,6 +114,96 @@ export const DUC_HAI_GALLERY = [
   }
 ];
 
+export const K94_TOOLS_BANNER_SVG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260">
+  <defs>
+    <linearGradient id="kbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0D102A"/>
+      <stop offset="55%" stop-color="#1E1B4B"/>
+      <stop offset="100%" stop-color="#090D1C"/>
+    </linearGradient>
+    <linearGradient id="kgold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF0A8"/>
+      <stop offset="50%" stop-color="#FACC15"/>
+      <stop offset="100%" stop-color="#CA8A04"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="260" rx="16" fill="url(#kbg)"/>
+  <rect x="6" y="6" width="468" height="248" rx="12" fill="none" stroke="url(#kgold)" stroke-width="2.5"/>
+  <!-- Left Laptop & AI Chip Illustration -->
+  <g transform="translate(26, 62)">
+    <rect x="8" y="8" width="120" height="82" rx="8" fill="#0F172A" stroke="#38BDF8" stroke-width="3"/>
+    <rect x="18" y="18" width="100" height="52" rx="4" fill="#1E293B"/>
+    <polygon points="58,32 58,56 78,44" fill="#FACC15"/>
+    <rect x="0" y="90" width="136" height="10" rx="5" fill="#94A3B8"/>
+    <circle cx="110" cy="24" r="16" fill="#7C3AED" stroke="#FACC15" stroke-width="2"/>
+    <text x="110" y="29" font-family="sans-serif" font-size="11" font-weight="900" fill="#FFF" text-anchor="middle">AI</text>
+  </g>
+  <!-- Title & Services -->
+  <text x="310" y="76" font-family="serif" font-size="22" font-weight="900" fill="#FACC15" text-anchor="middle">K94 DIGITAL STORE</text>
+  <text x="310" y="102" font-family="sans-serif" font-size="12.5" font-weight="800" fill="#E9D5FF" text-anchor="middle">CHỢ TOOL AI · APP · WEB · DỊCH VỤ SỐ</text>
+  <text x="310" y="124" font-family="sans-serif" font-size="11" font-weight="700" fill="#93C5FD" text-anchor="middle">HHD CapCut · Auto MKT · POS · Ads Đa Kênh</text>
+  <rect x="205" y="138" width="210" height="28" rx="14" fill="#7C3AED" stroke="#FACC15" stroke-width="1.5"/>
+  <text x="310" y="156" font-family="sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">HOTLINE/ZALO: 0983.339.397</text>
+  <text x="240" y="208" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#86EFAC" text-anchor="middle">⚡ Cấp Key Bản Quyền &amp; Hỗ Trợ Cài Đặt 24/7</text>
+</svg>`);
+
+export const K94_TOOLS_GALLERY = [
+  {
+    label: 'Tool Video AI & HHD CapCut',
+    img:
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+        <rect width="200" height="150" rx="12" fill="#0F142C"/>
+        <rect x="3" y="3" width="194" height="144" rx="10" fill="none" stroke="#FACC15" stroke-width="1.5"/>
+        <rect x="34" y="22" width="132" height="78" rx="8" fill="#090D1A" stroke="#38BDF8" stroke-width="2.5"/>
+        <polygon points="88,45 88,75 116,60" fill="#FACC15"/>
+        <rect x="44" y="84" width="112" height="6" rx="3" fill="#A855F7"/>
+        <text x="100" y="132" font-family="sans-serif" font-size="11.5" font-weight="800" fill="#FDE047" text-anchor="middle">🎬 Tool Video AI &amp; CapCut</text>
+      </svg>`)
+  },
+  {
+    label: 'Tool Auto MKT & Chatbot AI',
+    img:
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+        <rect width="200" height="150" rx="12" fill="#0F142C"/>
+        <rect x="3" y="3" width="194" height="144" rx="10" fill="none" stroke="#FACC15" stroke-width="1.5"/>
+        <rect x="58" y="26" width="84" height="68" rx="16" fill="#090D1A" stroke="#10B981" stroke-width="3"/>
+        <circle cx="82" cy="54" r="8" fill="#FACC15"/>
+        <circle cx="118" cy="54" r="8" fill="#FACC15"/>
+        <path d="M 80 76 Q 100 88 120 76" fill="none" stroke="#38BDF8" stroke-width="3.5" stroke-linecap="round"/>
+        <text x="100" y="132" font-family="sans-serif" font-size="11.5" font-weight="800" fill="#FDE047" text-anchor="middle">🤖 Auto MKT &amp; Chatbot AI</text>
+      </svg>`)
+  },
+  {
+    label: 'Thiết Kế Web & App POS',
+    img:
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+        <rect width="200" height="150" rx="12" fill="#0F142C"/>
+        <rect x="3" y="3" width="194" height="144" rx="10" fill="none" stroke="#FACC15" stroke-width="1.5"/>
+        <rect x="30" y="24" width="104" height="72" rx="7" fill="#090D1A" stroke="#FACC15" stroke-width="2.5"/>
+        <rect x="126" y="34" width="44" height="68" rx="8" fill="#1E293B" stroke="#38BDF8" stroke-width="2.5"/>
+        <text x="82" y="66" font-family="sans-serif" font-size="13" font-weight="900" fill="#38BDF8" text-anchor="middle">WEB/APP</text>
+        <text x="100" y="132" font-family="sans-serif" font-size="11.5" font-weight="800" fill="#FDE047" text-anchor="middle">📱 Thiết Kế Web &amp; App K94</text>
+      </svg>`)
+  },
+  {
+    label: 'Dịch Vụ Truyền Thông & Ads',
+    img:
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+        <rect width="200" height="150" rx="12" fill="#0F142C"/>
+        <rect x="3" y="3" width="194" height="144" rx="10" fill="none" stroke="#FACC15" stroke-width="1.5"/>
+        <path d="M 52 64 L 106 38 L 106 90 L 52 64 Z" fill="#F43F5E"/>
+        <polyline points="118,86 132,64 144,72 162,40" fill="none" stroke="#4ADE80" stroke-width="4" stroke-linecap="round"/>
+        <text x="100" y="132" font-family="sans-serif" font-size="11.5" font-weight="800" fill="#FDE047" text-anchor="middle">📢 Dịch Vụ Ads &amp; Media K94</text>
+      </svg>`)
+  }
+];
+
 export const VIETQR_BANKS = [
   { code: 'MB', name: 'MBBank (Ngân hàng Quân Đội)' },
   { code: 'VCB', name: 'Vietcombank' },
@@ -189,13 +279,16 @@ export const DEFAULT_MONETIZATION_CONFIG = {
       },
       {
         id: 'left-slot-2',
-        badge: '👑 TRUYỀN THÔNG K94',
-        title: 'Thiết Kế Web, Quay Dựng Video & Quảng Cáo Đa Kênh K94 Media',
-        desc: 'Sản xuất TVC, TikTok/Reels, Thiết kế Logo - Biển hiệu chuẩn kích thước Đỏ Lỗ Ban & Chạy Ads trọn gói.',
-        priceTag: 'Ưu đãi Doanh Nghiệp',
-        imageUrl: '',
-        ctaText: '💬 Zalo K94: 0983.339.397',
-        ctaUrl: 'https://zalo.me/0983339397',
+        badge: '🚀 K94 TOOL · APP · DỊCH VỤ SỐ',
+        title: 'Chợ Phần Mềm, Tool AI, App & Dịch Vụ Truyền Thông K94 × Đối Tác',
+        desc: 'Cung cấp HHD CapCut AI, Tool Tải & Reup Đa Kênh, Chatbot AI Chốt Đơn, App Quản Lý Bán Hàng, Thiết Kế Web & Quảng Cáo Trọn Gói.',
+        address: 'Công ty Truyền thông K94 & Liên minh Đối tác',
+        phone: '0983339397',
+        priceTag: 'Bấm Xem Chợ Tool →',
+        imageUrl: K94_TOOLS_BANNER_SVG,
+        galleryImages: K94_TOOLS_GALLERY,
+        ctaText: '🚀 Mở Chợ Tool, App & Dịch Vụ K94 →',
+        ctaUrl: '/k94-tools-store',
         isRentalSlot: false
       },
       {

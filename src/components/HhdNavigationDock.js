@@ -20,6 +20,14 @@ const HHD_FEATURES = [
     badge: 'Chính Tông'
   },
   {
+    href: '/k94-tools-store',
+    icon: '🚀',
+    shortLabel: 'Chợ Tool & App K94',
+    title: 'Chợ Tool AI, App & Dịch Vụ K94',
+    subtitle: 'HHD CapCut AI, Tool Reup, Chatbot Chốt Đơn, Thiết Kế Web/App & Ads K94',
+    badge: 'K94 × Đối Tác'
+  },
+  {
     href: '/duc-hai-fishing',
     icon: '🎣',
     shortLabel: 'Shop Đồ Câu Đức Hải',
