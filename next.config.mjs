@@ -7,6 +7,7 @@ const nextConfig = {
     ? {
         output: 'export',
         basePath: '/tuvi-hhd',
+        trailingSlash: true,
         images: { unoptimized: true },
       }
     : {}),

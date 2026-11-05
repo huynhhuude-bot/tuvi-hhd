@@ -74,44 +74,8 @@ if (typeof window !== 'undefined' && !window.__hhdFetchPatched) {
   };
 }
 
-const BasePathLink = React.forwardRef(function BasePathLink(props, ref) {
-  let { href, ...rest } = props;
-  if (
-    typeof window !== 'undefined' &&
-    typeof href === 'string' &&
-    href.startsWith('/') &&
-    !href.startsWith('/tuvi-hhd') &&
-    window.location.pathname.startsWith('/tuvi-hhd')
-  ) {
-    href = `/tuvi-hhd${href === '/' ? '' : href}`;
-  }
-  return <Link ref={ref} href={href} {...rest} />;
-});
-
-const PatchedNavigation = {
-  ...NextNavigation,
-  useRouter() {
-    const router = NextNavigation.useRouter();
-    return React.useMemo(
-      () => ({
-        ...router,
-        push(href, options) {
-          if (
-            typeof window !== 'undefined' &&
-            typeof href === 'string' &&
-            href.startsWith('/') &&
-            !href.startsWith('/tuvi-hhd') &&
-            window.location.pathname.startsWith('/tuvi-hhd')
-          ) {
-            return router.push(`/tuvi-hhd${href === '/' ? '' : href}`, options);
-          }
-          return router.push(href, options);
-        },
-      }),
-      [router]
-    );
-  },
-};
+const BasePathLink = Link;
+const PatchedNavigation = NextNavigation;
 
 const registry = {
   43476: jsxRuntime,

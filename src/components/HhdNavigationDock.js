@@ -64,7 +64,8 @@ const HHD_FEATURES = [
 ];
 
 export default function HhdNavigationDock() {
-  const pathname = usePathname() || '/';
+  const rawPathname = usePathname() || '/';
+  const pathname = rawPathname.length > 1 && rawPathname.endsWith('/') ? rawPathname.slice(0, -1) : rawPathname;
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
