@@ -311,6 +311,32 @@ export default function TheHoMenhPage() {
                 </span>
               </div>
             </div>
+
+            {/* Physical Gold-Plated Metal Card Order CTA */}
+            <div style={{ marginTop: 18, width: '100%', maxWidth: 420, background: 'rgba(20,22,30,0.92)', border: '1px solid #c9a84c', borderRadius: 18, padding: 16, textAlign: 'center' }}>
+              <div style={{ fontSize: 11.5, color: '#FFD54F', fontWeight: 800, marginBottom: 4 }}>
+                🪪 ĐẶT KHẮC KIM BÀI HỢP KIM MẠ VÀNG THẬT BỎ VÍ / ỐP LƯNG
+              </div>
+              <div style={{ fontSize: 12.5, color: '#D0D5E0', marginBottom: 10, lineHeight: 1.5 }}>
+                Khắc laser tên riêng <strong>{fullName}</strong> & Đức Phật <strong>{profile.guardian.buddha}</strong> lên phôi kim loại mạ vàng cao cấp giao tận nơi.
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <a
+                  href="https://zalo.me/0983339397"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ padding: '9px 16px', borderRadius: 99, background: 'linear-gradient(135deg, #e0c168, #b88928)', color: '#0B0C10', fontWeight: 800, fontSize: 12.5, textDecoration: 'none' }}
+                >
+                  💬 Đặt Khắc Kim Bài Zalo K94: 0983.339.397
+                </a>
+                <Link
+                  href="/vat-pham-phong-thuy"
+                  style={{ padding: '9px 14px', borderRadius: 99, border: '1px solid #c9a84c', color: '#F4E3B2', fontWeight: 700, fontSize: 12, textDecoration: 'none' }}
+                >
+                  🛍️ Thỉnh Dây Chuyền Phật Bản Mệnh
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </main>

@@ -592,6 +592,27 @@ export default function CalligraphyPage() {
                 </p>
               </div>
             </div>
+
+            {/* Print-on-Demand Physical Calligraphy Order Box */}
+            <div style={{ marginTop: 18, background: 'linear-gradient(135deg, rgba(201,168,76,0.18), rgba(20,22,32,0.95))', border: '1px solid #c9a84c', borderRadius: 16, padding: 18, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <div style={{ fontSize: 11, color: '#FFD54F', fontWeight: 800 }}>🖼️ ẤN PHẨM THƯ PHÁP THẬT GIAO TẬN NHÀ</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#F4E3B2', margin: '2px 0' }}>
+                  Đặt In Tranh Lụa Đóng Khung Gỗ Hoặc Biểu Lụa Treo Tường Chữ &ldquo;{currentChar.viet}&rdquo;
+                </div>
+                <div style={{ fontSize: 12, color: '#9DA3B4' }}>
+                  Chế tác bởi K94 Media · Làm quà biếu tân gia, khai trương, mừng thọ sang trọng.
+                </div>
+              </div>
+              <a
+                href="https://zalo.me/0983339397"
+                target="_blank"
+                rel="noreferrer"
+                style={{ padding: '10px 16px', borderRadius: 99, background: 'linear-gradient(135deg, #e0c168, #b88928)', color: '#0B0C10', fontWeight: 800, fontSize: 12.5, textDecoration: 'none' }}
+              >
+                💬 Đặt In Tranh Qua Zalo K94 (0983.339.397)
+              </a>
+            </div>
           </div>
         </div>
       </main>

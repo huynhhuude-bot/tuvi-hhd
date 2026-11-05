@@ -28,6 +28,62 @@ const HHD_FEATURES = [
     badge: 'Affiliate'
   },
   {
+    href: '/bat-tu-can-xuong',
+    icon: '⚖️',
+    shortLabel: 'Cân Xương & Bát Tự',
+    title: 'Cân Xương Tính Số & Bát Tự',
+    subtitle: 'Tính mấy lượng mấy chỉ (Viên Thiên Cang) & kiểm tra Bát Tự khuyết hành',
+    badge: 'Mới · Hot'
+  },
+  {
+    href: '/phong-thuy-thuong-hieu',
+    icon: '🎨',
+    shortLabel: 'Màu Logo & Biển Hiệu',
+    title: 'Phong Thủy Thương Hiệu K94',
+    subtitle: 'Chọn màu Logo, hình khối biểu trưng, biển hiệu quảng cáo & ngành nghề',
+    badge: 'B2B K94'
+  },
+  {
+    href: '/phong-thuy-ban-lam-viec',
+    icon: '🪴',
+    shortLabel: 'Bàn Làm Việc & Cây',
+    title: 'Phong Thủy Bàn Làm Việc & Cây',
+    subtitle: 'Sơ đồ 9 cung Bát Quái trên bàn làm việc & Top cây cảnh để bàn hợp mệnh',
+    badge: 'Tài Lộc'
+  },
+  {
+    href: '/van-trinh-ngay',
+    icon: '🐉',
+    shortLabel: 'Vận Trình Hôm Nay',
+    title: 'Vận Trình 12 Con Giáp Ngày',
+    subtitle: 'Xem sao Tài Lộc hôm nay, màu áo may mắn, hướng Tài Thần & Quý Nhân',
+    badge: 'Hàng Ngày'
+  },
+  {
+    href: '/giai-mong',
+    icon: '💤',
+    shortLabel: 'Giải Mã Giấc Mơ',
+    title: 'Chu Công Giải Mộng Cổ Truyền',
+    subtitle: 'Giải mã điềm báo giấc mơ thấy rắn, nước, vàng bạc, Phật & lời khuyên',
+    badge: 'Giải Mộng'
+  },
+  {
+    href: '/boi-kieu',
+    icon: '📖',
+    shortLabel: 'Lẩy Kiều Nguyễn Du',
+    title: 'Bói Kiều & Lẩy Kiều Cổ Truyền',
+    subtitle: 'Rút quẻ thơ Truyện Kiều luận Công danh, Tình duyên & xuất thẻ thơ PNG',
+    badge: 'Văn Hóa'
+  },
+  {
+    href: '/tinh-tam',
+    icon: '📿',
+    shortLabel: 'Gõ Mõ & Chuỗi 108',
+    title: 'Gõ Mõ & Lần Chuỗi 108 Hạt',
+    subtitle: 'Không gian tĩnh tâm gõ mõ gỗ, chuông thiền 528Hz & chuỗi trầm 108 hạt',
+    badge: 'Tĩnh Tâm'
+  },
+  {
     href: '/sim-phong-thuy',
     icon: '📱',
     shortLabel: 'Chấm Điểm Sim',

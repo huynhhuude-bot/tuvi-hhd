@@ -12,6 +12,55 @@ const TWELVE_METAPHYSICS_CARDS = [
     desc: 'Gợi ý vòng đá phong thủy, Tỳ Hưu, Thiềm Thừ, Phật Bản Mệnh, Chuông Đồng và Sim Số Đẹp tự động lọc theo Năm Sinh & Ngũ Hành Bản Mệnh.'
   },
   {
+    href: '/bat-tu-can-xuong',
+    icon: '⚖️',
+    tag: 'Viên Thiên Cang · Tứ Trụ Tử Bình',
+    title: 'Cân Xương Tính Số & Bát Tự Khuyết Hành',
+    desc: 'Tính trọng lượng xương cốt (mấy lượng mấy chỉ) theo đại sư Viên Thiên Cang, lập Tứ Trụ 8 chữ Can Chi và tìm hành bị khuyết để bổ sung Dụng Thần.'
+  },
+  {
+    href: '/phong-thuy-thuong-hieu',
+    icon: '🎨',
+    tag: 'Màu Logo · Biển Hiệu · B2B K94 Media',
+    title: 'Phong Thủy Thương Hiệu, Logo & Biển Hiệu',
+    desc: 'Tư vấn màu sắc nhận diện thương hiệu, hình khối thiết kế Logo, mô phỏng biển hiệu quảng cáo tương sinh và gợi ý ngành nghề kinh doanh đại vượng.'
+  },
+  {
+    href: '/phong-thuy-ban-lam-viec',
+    icon: '🪴',
+    tag: 'Cửu Cung Bát Quái · Cây Cảnh Hợp Mệnh',
+    title: 'Bố Trí Bàn Làm Việc & Cây Cảnh Phong Thủy',
+    desc: 'Sơ đồ 9 cung Bát Quái trên mặt bàn làm việc kích hoạt cung Tài Lộc & Quan Lộc, kèm gợi ý Top cây cảnh để bàn & tranh treo hợp tuổi.'
+  },
+  {
+    href: '/van-trinh-ngay',
+    icon: '🐉',
+    tag: 'Tử Vi Hàng Ngày · Màu Sắc & Giờ Tốt',
+    title: 'Vận Trình 12 Con Giáp Hôm Nay',
+    desc: 'Tra cứu chỉ số Tài Lộc - Công Danh - Nhân Duyên hôm nay của 12 con giáp, màu trang phục may mắn, hướng Tài Thần và tuổi quý nhân hợp tác.'
+  },
+  {
+    href: '/giai-mong',
+    icon: '💤',
+    tag: 'Chu Công Giải Mộng · Điềm Báo Tâm Linh',
+    title: 'Giải Mã Giấc Mơ Cổ Truyền (Chu Công)',
+    desc: 'Tra cứu ý nghĩa điềm báo các giấc mơ phổ biến (mơ thấy rắn, nước lớn, vàng bạc, Phật, bay lên trời...) và lời khuyên hành xử cát tường.'
+  },
+  {
+    href: '/boi-kieu',
+    icon: '📖',
+    tag: 'Đại Thi Hào Nguyễn Du · Xuất Thẻ Thơ PNG',
+    title: 'Lẩy Kiều & Bói Kiều Cổ Truyền',
+    desc: 'Thành tâm mở trang Truyện Kiều đón nhận cặp câu lục bát ứng nghiệm cho Công danh, Tài lộc, Tình duyên và tải thẻ thơ thư pháp K94.'
+  },
+  {
+    href: '/tinh-tam',
+    icon: '📿',
+    tag: 'Mõ Gỗ Cổ Tự · Chuông Thiền 528Hz',
+    title: 'Không Gian Tĩnh Tâm · Gõ Mõ & Lần Chuỗi 108 Hạt',
+    desc: 'Chạm gõ mõ gỗ hoặc lần chuỗi Trầm Hương 108 hạt tương tác với âm thanh thiền định chân thực giúp xả stress và tích tạo phước lành.'
+  },
+  {
     href: '/sim-phong-thuy',
     icon: '📱',
     tag: 'Bát Cực Linh Số · 64 Quẻ Dịch',

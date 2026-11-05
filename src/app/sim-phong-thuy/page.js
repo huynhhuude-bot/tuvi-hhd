@@ -400,6 +400,35 @@ export default function SimPhongThuyPage() {
                 ))}
               </div>
             </div>
+
+            {/* Fintech Bank Account & VIP Sim Affiliate Conversion Box */}
+            <div style={{ marginTop: 26, background: 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(20,22,32,0.95))', border: '1.5px solid #c9a84c', borderRadius: 20, padding: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+              <div>
+                <div style={{ fontSize: 11.5, color: '#FFD54F', fontWeight: 800 }}>🏦 MỞ STK NGÂN HÀNG SỐ ĐẸP MIỄN PHÍ & ĐẶT SIM PHONG THỦY K94</div>
+                <div style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 20, fontWeight: 700, color: '#F4E3B2', margin: '4px 0' }}>
+                  Sở Hữu Ngay STK Đuôi Lộc Phát (6868), Thần Tài (3979) & Sim Hợp Mệnh {analysis.userElement}
+                </div>
+                <div style={{ fontSize: 13, color: '#D0D5E0' }}>
+                  Hỗ trợ chọn số tài khoản ngân hàng (MBBank, VPBank, Techcombank, TPBank) và tìm Sim Bát Cực Linh Số chuẩn Bát Tự.
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <a
+                  href="https://zalo.me/0983339397"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ padding: '11px 18px', borderRadius: 99, background: 'linear-gradient(135deg, #e0c168, #b88928)', color: '#0B0C10', fontWeight: 900, fontSize: 13, textDecoration: 'none' }}
+                >
+                  📱 Đặt Sim & Mở STK Số Đẹp (Zalo: 0983.339.397)
+                </a>
+                <Link
+                  href="/vat-pham-phong-thuy"
+                  style={{ padding: '11px 16px', borderRadius: 99, border: '1px solid #c9a84c', color: '#F4E3B2', fontWeight: 700, fontSize: 13, textDecoration: 'none' }}
+                >
+                  🛍️ Xem Ốp Lưng & Pháp Khí Kích Tài
+                </Link>
+              </div>
+            </div>
           </>
         )}
       </main>
