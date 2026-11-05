@@ -1,5 +1,6 @@
 import './globals.css';
 import { ThemeProvider } from '../lib/turbopackShim';
+import HhdNavigationDock from '../components/HhdNavigationDock';
 
 export const metadata = {
   title: 'HHD · Tử Vi Đẩu Số Chính Tông | Lập Lá Số, Luận Giải AI & Bách Khoa 14 Chính Tinh',
@@ -33,7 +34,10 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-screen">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <HhdNavigationDock />
+        </ThemeProvider>
       </body>
     </html>
   );
