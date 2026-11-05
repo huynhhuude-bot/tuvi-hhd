@@ -131,6 +131,63 @@ export default function HhdSideAdLayout({ children }) {
         {slot.desc}
       </div>
 
+      {/* 2x2 Product Image Gallery (Máy Câu, Cần Câu, Mồi, Phao Chì) */}
+      {Array.isArray(slot.galleryImages) && slot.galleryImages.length > 0 && (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 6,
+            marginTop: 2
+          }}
+        >
+          {slot.galleryImages.map((g, i) => (
+            <a
+              key={i}
+              href={slot.ctaUrl}
+              target="_blank"
+              rel="noreferrer sponsored"
+              style={{
+                display: 'block',
+                textDecoration: 'none',
+                background: '#090D16',
+                borderRadius: 8,
+                overflow: 'hidden',
+                border: '1px solid rgba(201,168,76,0.28)'
+              }}
+            >
+              <img
+                src={g.img}
+                alt={g.label}
+                style={{ width: '100%', height: 74, objectFit: 'cover', display: 'block' }}
+              />
+            </a>
+          ))}
+        </div>
+      )}
+
+      {/* Store Address & Direct Phone Highlight */}
+      {slot.address && (
+        <div
+          style={{
+            padding: '7px 9px',
+            borderRadius: 8,
+            background: 'rgba(56, 189, 248, 0.1)',
+            border: '1px solid rgba(56, 189, 248, 0.35)',
+            fontSize: 11,
+            color: '#E0F2FE',
+            lineHeight: 1.45
+          }}
+        >
+          <div>📍 <strong>Đ/c:</strong> {slot.address}</div>
+          {slot.phone && (
+            <div style={{ marginTop: 3, color: '#FDE047', fontWeight: 800 }}>
+              📞 ĐT/Zalo: {slot.phone}
+            </div>
+          )}
+        </div>
+      )}
+
       <a
         href={slot.ctaUrl}
         target="_blank"
@@ -141,9 +198,9 @@ export default function HhdSideAdLayout({ children }) {
           borderRadius: 9,
           background: slot.isRentalSlot
             ? 'linear-gradient(135deg, #e0c168, #b88928)'
-            : 'rgba(201, 168, 76, 0.18)',
+            : 'linear-gradient(135deg, #e0c168, #b88928)',
           border: '1px solid #c9a84c',
-          color: slot.isRentalSlot ? '#0B0C10' : '#F4E3B2',
+          color: '#0B0C10',
           fontWeight: 800,
           fontSize: 11.5,
           textAlign: 'center',

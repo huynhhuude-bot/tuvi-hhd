@@ -697,6 +697,29 @@ export default function QuanLyKiemTienPage() {
                         />
                       </div>
 
+                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
+                        <div>
+                          <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Địa Chỉ Cửa Hàng / Đơn Vị (Tùy chọn)</label>
+                          <input
+                            type="text"
+                            placeholder="VD: Ấp Cái Cui, xã Hòa Hiệp, Tỉnh Vĩnh Long"
+                            value={slot.address || ''}
+                            onChange={(e) => updateSidePanelField(sideKey, idx, 'address', e.target.value)}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#E0F2FE' }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Số Điện Thoại Liên Hệ</label>
+                          <input
+                            type="text"
+                            placeholder="VD: 0983339397"
+                            value={slot.phone || ''}
+                            onChange={(e) => updateSidePanelField(sideKey, idx, 'phone', e.target.value)}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#FFD54F', fontWeight: 700 }}
+                          />
+                        </div>
+                      </div>
+
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                         <div>
                           <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Chữ Trên Nút Bấm (CTA)</label>

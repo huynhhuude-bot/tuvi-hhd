@@ -1,4 +1,118 @@
-export const MONETIZATION_STORAGE_KEY = 'hhd_k94_monetization_v1';
+export const MONETIZATION_STORAGE_KEY = 'hhd_k94_monetization_v2';
+
+// High-detail SVG Data URIs for Đức Hải Fishing (100% instant load, never broken offline/online)
+export const DUC_HAI_FISHING_BANNER_SVG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#071A2C"/>
+      <stop offset="55%" stop-color="#0D2E46"/>
+      <stop offset="100%" stop-color="#061320"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF0A8"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#8A640F"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="260" rx="16" fill="url(#bg)"/>
+  <rect x="6" y="6" width="468" height="248" rx="12" fill="none" stroke="url(#gold)" stroke-width="2.5"/>
+  <!-- River Waves -->
+  <path d="M 10 215 Q 70 200 130 215 T 250 215 T 370 215 T 470 215" fill="none" stroke="#38BDF8" stroke-width="2" opacity="0.45"/>
+  <path d="M 10 232 Q 70 218 130 232 T 250 232 T 370 232 T 470 232" fill="none" stroke="#0284C7" stroke-width="2" opacity="0.35"/>
+  <!-- Carbon Fishing Rod Arching Across -->
+  <path d="M 28 228 Q 165 65 425 42" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M 28 228 Q 165 65 425 42" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-dasharray="10,6"/>
+  <!-- Fishing Line & Float + Hook -->
+  <line x1="425" y1="42" x2="425" y2="195" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <ellipse cx="425" cy="145" rx="7" ry="20" fill="#EF4444" stroke="#FACC15" stroke-width="2"/>
+  <line x1="425" y1="112" x2="425" y2="125" stroke="#4ADE80" stroke-width="3"/>
+  <path d="M 425 195 L 425 212 Q 425 224 414 222 Q 406 220 412 211" fill="none" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
+  <!-- Detailed Spinning Fishing Reel (Máy Câu Đứng) -->
+  <g transform="translate(115, 132)">
+    <circle cx="0" cy="0" r="42" fill="#0F172A" stroke="url(#gold)" stroke-width="4"/>
+    <circle cx="0" cy="0" r="28" fill="#1E293B" stroke="#38BDF8" stroke-width="2"/>
+    <rect x="-16" y="-48" width="32" height="22" rx="4" fill="url(#gold)" stroke="#0F172A" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="10" fill="url(#gold)"/>
+    <path d="M 0 0 L 38 26 L 48 16" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="50" cy="14" r="8" fill="#EF4444" stroke="url(#gold)" stroke-width="2"/>
+  </g>
+  <!-- Title Text -->
+  <text x="275" y="96" font-family="serif" font-size="23" font-weight="900" fill="#FFD54F" text-anchor="middle">ĐỨC HẢI FISHING</text>
+  <text x="275" y="122" font-family="sans-serif" font-size="13" font-weight="800" fill="#E0F2FE" text-anchor="middle">CẦN CÂU · MÁY CÂU · MỒI · PHAO · LƯỠI · CHÌ</text>
+  <rect x="175" y="136" width="200" height="26" rx="13" fill="#DC2626" stroke="#FACC15" stroke-width="1.5"/>
+  <text x="275" y="153" font-family="sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">ĐT / ZALO: 0983.339.397</text>
+  <text x="275" y="182" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#93C5FD" text-anchor="middle">📍 Ấp Cái Cui, Xã Hòa Hiệp, Vĩnh Long</text>
+</svg>`);
+
+export const DUC_HAI_GALLERY = [
+  {
+    label: 'Máy Câu Kim Loại VIP',
+    img:
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+        <rect width="200" height="150" rx="12" fill="#0B192C"/>
+        <rect x="3" y="3" width="194" height="144" rx="10" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+        <circle cx="92" cy="72" r="36" fill="#1E293B" stroke="#FACC15" stroke-width="4"/>
+        <circle cx="92" cy="72" r="22" fill="#0F172A" stroke="#38BDF8" stroke-width="2"/>
+        <rect x="74" y="24" width="36" height="22" rx="4" fill="#D4AF37"/>
+        <path d="M 92 72 L 138 96 L 150 80" fill="none" stroke="#FACC15" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="152" cy="78" r="8" fill="#EF4444" stroke="#FACC15" stroke-width="2"/>
+        <circle cx="92" cy="72" r="8" fill="#FACC15"/>
+        <text x="100" y="136" font-family="sans-serif" font-size="12" font-weight="800" fill="#FDE047" text-anchor="middle">⚙️ Máy Câu Đứng &amp; Ngang</text>
+      </svg>`)
+  },
+  {
+    label: 'Cần Câu Carbon Siêu Bền',
+    img:
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+        <rect width="200" height="150" rx="12" fill="#0B192C"/>
+        <rect x="3" y="3" width="194" height="144" rx="10" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+        <line x1="22" y1="112" x2="178" y2="24" stroke="#FACC15" stroke-width="6" stroke-linecap="round"/>
+        <line x1="22" y1="112" x2="70" y2="85" stroke="#DC2626" stroke-width="9" stroke-linecap="round"/>
+        <circle cx="95" cy="75" r="5" fill="none" stroke="#38BDF8" stroke-width="2.5"/>
+        <circle cx="130" cy="55" r="4" fill="none" stroke="#38BDF8" stroke-width="2"/>
+        <circle cx="162" cy="36" r="3.5" fill="none" stroke="#38BDF8" stroke-width="2"/>
+        <line x1="30" y1="118" x2="182" y2="42" stroke="#94A3B8" stroke-width="4" stroke-linecap="round"/>
+        <text x="100" y="136" font-family="sans-serif" font-size="12" font-weight="800" fill="#FDE047" text-anchor="middle">🎣 Cần Câu Carbon &amp; Lure</text>
+      </svg>`)
+  },
+  {
+    label: 'Mồi Câu & Cá Giả Nhạy',
+    img:
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+        <rect width="200" height="150" rx="12" fill="#0B192C"/>
+        <rect x="3" y="3" width="194" height="144" rx="10" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+        <path d="M 45 68 Q 95 36 148 68 Q 95 100 45 68 Z" fill="#10B981" stroke="#FACC15" stroke-width="3"/>
+        <path d="M 145 68 L 168 50 L 162 68 L 168 86 Z" fill="#EF4444"/>
+        <circle cx="66" cy="63" r="5" fill="#FFF"/>
+        <circle cx="65" cy="63" r="2.5" fill="#000"/>
+        <path d="M 95 82 L 95 102 Q 95 112 85 108" fill="none" stroke="#E2E8F0" stroke-width="3" stroke-linecap="round"/>
+        <text x="100" y="136" font-family="sans-serif" font-size="12" font-weight="800" fill="#FDE047" text-anchor="middle">🐟 Mồi Câu, Nhái Hơi, Cám</text>
+      </svg>`)
+  },
+  {
+    label: 'Phao Đèn, Lưỡi & Chì Câu',
+    img:
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+        <rect width="200" height="150" rx="12" fill="#0B192C"/>
+        <rect x="3" y="3" width="194" height="144" rx="10" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+        <!-- Float -->
+        <line x1="65" y1="18" x2="65" y2="112" stroke="#4ADE80" stroke-width="3"/>
+        <ellipse cx="65" cy="68" rx="11" ry="26" fill="#EF4444" stroke="#FACC15" stroke-width="2.5"/>
+        <!-- Hook -->
+        <circle cx="132" cy="34" r="5" fill="none" stroke="#FACC15" stroke-width="3"/>
+        <path d="M 132 39 L 132 82 Q 132 104 112 100 Q 100 96 108 80" fill="none" stroke="#FACC15" stroke-width="4" stroke-linecap="round"/>
+        <!-- Sinker Lead -->
+        <ellipse cx="158" cy="72" rx="9" ry="14" fill="#94A3B8" stroke="#E2E8F0" stroke-width="1.5"/>
+        <text x="100" y="136" font-family="sans-serif" font-size="12" font-weight="800" fill="#FDE047" text-anchor="middle">🪝 Phao, Lưỡi Câu &amp; Chì</text>
+      </svg>`)
+  }
+];
 
 export const VIETQR_BANKS = [
   { code: 'MB', name: 'MBBank (Ngân hàng Quân Đội)' },
@@ -61,6 +175,20 @@ export const DEFAULT_MONETIZATION_CONFIG = {
     left: [
       {
         id: 'left-slot-1',
+        badge: '🎣 ĐỨC HẢI FISHING · VĨNH LONG',
+        title: 'Cửa Hàng Dụng Cụ Câu Cá ĐỨC HẢI FISHING — Cần Câu, Máy Câu, Mồi, Phao, Lưỡi, Chì',
+        desc: 'Chuyên mua bán dụng cụ câu cá, mồi câu, cần câu, máy câu, lưỡi câu, phao chì chính hãng, uy tín, giá tốt nhất.',
+        address: 'Ấp Cái Cui, xã Hòa Hiệp, Tỉnh Vĩnh Long',
+        phone: '0983339397',
+        priceTag: 'Sỉ & Lẻ Đồ Câu',
+        imageUrl: DUC_HAI_FISHING_BANNER_SVG,
+        galleryImages: DUC_HAI_GALLERY,
+        ctaText: '📞 Gọi / Zalo Đặt Hàng: 0983.339.397',
+        ctaUrl: 'https://zalo.me/0983339397',
+        isRentalSlot: false
+      },
+      {
+        id: 'left-slot-2',
         badge: '👑 TRUYỀN THÔNG K94',
         title: 'Thiết Kế Web, Quay Dựng Video & Quảng Cáo Đa Kênh K94 Media',
         desc: 'Sản xuất TVC, TikTok/Reels, Thiết kế Logo - Biển hiệu chuẩn kích thước Đỏ Lỗ Ban & Chạy Ads trọn gói.',
@@ -71,21 +199,10 @@ export const DEFAULT_MONETIZATION_CONFIG = {
         isRentalSlot: false
       },
       {
-        id: 'left-slot-2',
-        badge: '📱 SIM VIP & STK SỐ ĐẸP',
-        title: 'Kho Sim Phong Thủy Bát Cực Linh Số & Mở STK Ngân Hàng Số Đẹp',
-        desc: 'Tra cứu Sim hợp Bát Tự, mở Tài khoản Ngân hàng Số Đẹp (Lộc Phát 68, Thần Tài 79) miễn phí 100% online.',
-        priceTag: 'Hoàn toàn hợp pháp',
-        imageUrl: '',
-        ctaText: '🔥 Chọn Sim & STK Số Đẹp →',
-        ctaUrl: 'https://zalo.me/0983339397',
-        isRentalSlot: false
-      },
-      {
         id: 'left-slot-3',
         badge: '📢 CHO THUÊ BANNER TRÁI',
         title: 'Vị Trí Quảng Cáo Cho Thuê Cánh Trái (240×360px)',
-        desc: 'Hiển thị cố định xuyên suốt 12 tính năng. Phù hợp: Shop Đá Phong Thủy, Trầm Hương, BĐS, Nội Thất, Trang Sức.',
+        desc: 'Hiển thị cố định xuyên suốt 20 tính năng. Phù hợp: Shop Đá Phong Thủy, Trầm Hương, BĐS, Nội Thất, Trang Sức.',
         priceTag: 'Liên hệ báo giá tháng',
         imageUrl: '',
         ctaText: '📞 Đặt Thuê Ngay: 0983.339.397',
