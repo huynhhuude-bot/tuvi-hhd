@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="ogBg" cx="68%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0f2342"/>
+      <stop offset="55%" stop-color="#050e1d"/>
+      <stop offset="100%" stop-color="#020810"/>
+    </radialGradient>
+    <linearGradient id="ogGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe8a0"/>
+      <stop offset="55%" stop-color="#d4a843"/>
+      <stop offset="100%" stop-color="#a8761a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#ogBg)"/>
+  <rect x="28" y="28" width="1144" height="574" rx="24" fill="none" stroke="rgba(212,168,67,0.32)" stroke-width="1.5"/>
+
+  <!-- Thiên Bàn Tinh Đồ bên phải -->
+  <g transform="translate(880, 315)">
+    <circle cx="0" cy="0" r="220" fill="none" stroke="rgba(212,168,67,0.28)" stroke-width="1.2" stroke-dasharray="4 6"/>
+    <circle cx="0" cy="0" r="172" fill="none" stroke="url(#ogGold)" stroke-width="2"/>
+    <polygon points="0,-172 149,86 -149,86" fill="rgba(212,168,67,0.10)" stroke="url(#ogGold)" stroke-width="2.2"/>
+    <line x1="0" y1="-172" x2="0" y2="172" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="6 5"/>
+    <circle cx="0" cy="0" r="92" fill="#061224" stroke="url(#ogGold)" stroke-width="1.8"/>
+    <text x="0" y="-8" text-anchor="middle" fill="#ffe8a0" font-family="serif" font-size="22" font-weight="bold">TỬ VI · THIÊN PHỦ</text>
+    <text x="0" y="22" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" letter-spacing="2">TAM PHƯƠNG TỨ CHÍNH</text>
+  </g>
+
+  <!-- Nội dung thương hiệu bên trái -->
+  <g transform="translate(84, 150)">
+    <text x="0" y="0" fill="#d4a843" font-family="sans-serif" font-size="16" font-weight="bold" letter-spacing="6">TỬ VI ĐẨU SỐ CHÍNH TÔNG · HỆ THỐNG HHD</text>
+    <text x="0" y="88" fill="url(#ogGold)" font-family="serif" font-size="76" font-weight="bold">HHD Tử Vi</text>
+    <text x="0" y="148" fill="#e2ecf8" font-family="sans-serif" font-size="26" font-weight="500">Tử Vi vi môn · Thiên Địa Nhân vi lộ · Tri hành hợp nhất</text>
+    <text x="0" y="206" fill="#9db0d0" font-family="sans-serif" font-size="20">✦ Chân thái dương thời 63 tỉnh thành Việt Nam (Kinh tuyến 105°Đ · UTC+7)</text>
+    <text x="0" y="244" fill="#9db0d0" font-family="sans-serif" font-size="20">✦ Bách khoa 14 Chính Tinh × 13 Chủ đề (182 chuyên đề độc bản)</text>
+    <text x="0" y="282" fill="#9db0d0" font-family="sans-serif" font-size="20">✦ 24 Bộ Song Tinh Đồng Cung · Hơn 30 Cách Cục Cổ Điển · Hợp Bàn Đôi Lứa</text>
+    <rect x="0" y="324" width="280" height="48" rx="24" fill="rgba(212,168,67,0.16)" stroke="#d4a843" stroke-width="1.5"/>
+    <text x="140" y="355" text-anchor="middle" fill="#ffe8a0" font-family="sans-serif" font-size="18" font-weight="bold" letter-spacing="2">hhd.tuvi.vn</text>
+  </g>
+</svg>
