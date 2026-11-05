@@ -192,6 +192,18 @@ export default function QuanLyKiemTienPage() {
     setConfig({ ...config, banners: nextBanners });
   };
 
+  const updateSidePanelField = (side, idx, field, val) => {
+    const currentSide = [...(config.sidePanels?.[side] || [])];
+    currentSide[idx] = { ...currentSide[idx], [field]: val };
+    setConfig({
+      ...config,
+      sidePanels: {
+        ...(config.sidePanels || DEFAULT_MONETIZATION_CONFIG.sidePanels),
+        [side]: currentSide
+      }
+    });
+  };
+
   const resetDefaults = () => {
     setConfig(DEFAULT_MONETIZATION_CONFIG);
     saveMonetizationConfig(DEFAULT_MONETIZATION_CONFIG);
@@ -453,13 +465,14 @@ export default function QuanLyKiemTienPage() {
           </p>
         </div>
 
-        {/* 4 Management Tabs */}
+        {/* 5 Management Tabs */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 28 }}>
           {[
             { id: 'affiliate', label: '🛒 1. Sản Phẩm & Link Affiliate' },
-            { id: 'banners', label: '📢 2. Banner Quảng Cáo K94' },
-            { id: 'vietqr', label: '🧧 3. Mã QR Ngân Hàng Nhận Lộc' },
-            { id: 'security', label: '🔐 4. Đổi Mật Khẩu / PIN & Sao Lưu' }
+            { id: 'sidepanels', label: '📐 2. Panel Quảng Cáo 2 Bên Trái/Phải (6 Khung)' },
+            { id: 'banners', label: '📢 3. Banner Ngang Chân Trang K94' },
+            { id: 'vietqr', label: '🧧 4. Mã QR Ngân Hàng Nhận Lộc' },
+            { id: 'security', label: '🔐 5. Đổi Mật Khẩu / PIN & Sao Lưu' }
           ].map((t) => (
             <button
               key={t.id}
@@ -583,7 +596,136 @@ export default function QuanLyKiemTienPage() {
           </div>
         )}
 
-        {/* TAB 2: AD BANNERS & K94 SERVICES */}
+        {/* TAB 2: LEFT & RIGHT SIDE PANELS (6 SLOTS FOR AD RENTAL & SERVICES) */}
+        {activeTab === 'sidepanels' && (
+          <div style={{ display: 'grid', gap: 28 }}>
+            <div style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.35)', borderRadius: 16, padding: 18 }}>
+              <div style={{ fontWeight: 800, color: '#F4E3B2', fontSize: 15, marginBottom: 4 }}>
+                📐 Quản Lý 6 Khung Panel Quảng Cáo Cho Thuê 2 Bên Trái & Phải (Hiển thị cố định ở tất cả 12 tính năng)
+              </div>
+              <div style={{ fontSize: 13, color: '#9DA3B4', lineHeight: 1.55 }}>
+                Khi có đối tác thuê đặt quảng cáo ở Cánh Trái hoặc Cánh Phải, bạn chỉ cần dán <strong>Link Ảnh Banner (240×360px)</strong>, sửa Tiêu đề và dán <strong>Link Đích (Website / Zalo / Shopee của khách)</strong> rồi bấm <strong>Lưu Toàn Bộ Thay Đổi</strong>.
+              </div>
+            </div>
+
+            {['left', 'right'].map((sideKey) => {
+              const sideTitle =
+                sideKey === 'left'
+                  ? '⬅️ 3 PANEL CÁNH TRÁI (LEFT SKYSCRAPER PANELS)'
+                  : '➡️ 3 PANEL CÁNH PHẢI (RIGHT SKYSCRAPER PANELS)';
+              const slots = config.sidePanels?.[sideKey] || [];
+
+              return (
+                <div key={sideKey} style={{ display: 'grid', gap: 16 }}>
+                  <h3 style={{ fontFamily: 'var(--font-serif, serif)', fontSize: 20, color: '#c9a84c', margin: 0 }}>
+                    {sideTitle}
+                  </h3>
+                  {slots.map((slot, idx) => (
+                    <div
+                      key={slot.id}
+                      style={{
+                        background: 'rgba(20,22,30,0.9)',
+                        border: '1px solid rgba(201,168,76,0.3)',
+                        borderRadius: 18,
+                        padding: 20,
+                        display: 'grid',
+                        gap: 12
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+                        <span style={{ fontSize: 13, color: '#FFD54F', fontWeight: 800 }}>
+                          {sideKey === 'left' ? `KHUNG TRÁI #${idx + 1}` : `KHUNG PHẢI #${idx + 1}`}
+                        </span>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: '#81C784', cursor: 'pointer' }}>
+                          <input
+                            type="checkbox"
+                            checked={Boolean(slot.isRentalSlot)}
+                            onChange={(e) => updateSidePanelField(sideKey, idx, 'isRentalSlot', e.target.checked)}
+                          />
+                          Hiển thị khung viền nét đứt &quot;Đang Cho Thuê Banner 240×360px&quot;
+                        </label>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 12 }}>
+                        <div>
+                          <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Nhãn (Badge)</label>
+                          <input
+                            type="text"
+                            value={slot.badge || ''}
+                            onChange={(e) => updateSidePanelField(sideKey, idx, 'badge', e.target.value)}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#c9a84c', fontWeight: 700 }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Nhãn Phụ / Giá Thuê</label>
+                          <input
+                            type="text"
+                            value={slot.priceTag || ''}
+                            onChange={(e) => updateSidePanelField(sideKey, idx, 'priceTag', e.target.value)}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#81C784', fontWeight: 700 }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Link Ảnh Banner (Tùy chọn, VD: https://.../banner.jpg)</label>
+                          <input
+                            type="text"
+                            placeholder="Để trống nếu dùng khung chữ"
+                            value={slot.imageUrl || ''}
+                            onChange={(e) => updateSidePanelField(sideKey, idx, 'imageUrl', e.target.value)}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#F4E3B2' }}
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Tiêu Đề Quảng Cáo</label>
+                        <input
+                          type="text"
+                          value={slot.title || ''}
+                          onChange={(e) => updateSidePanelField(sideKey, idx, 'title', e.target.value)}
+                          style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#F4E3B2', fontWeight: 700 }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Mô Tả Ngắn</label>
+                        <input
+                          type="text"
+                          value={slot.desc || ''}
+                          onChange={(e) => updateSidePanelField(sideKey, idx, 'desc', e.target.value)}
+                          style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#E2E4E9' }}
+                        />
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                        <div>
+                          <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Chữ Trên Nút Bấm (CTA)</label>
+                          <input
+                            type="text"
+                            value={slot.ctaText || ''}
+                            onChange={(e) => updateSidePanelField(sideKey, idx, 'ctaText', e.target.value)}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#FFD54F', fontWeight: 700 }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: 11, color: '#9DA3B4', display: 'block', marginBottom: 4 }}>Link Đích Khi Khách Bấm (Zalo / Web / Affiliate)</label>
+                          <input
+                            type="text"
+                            value={slot.ctaUrl || ''}
+                            onChange={(e) => updateSidePanelField(sideKey, idx, 'ctaUrl', e.target.value)}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(201,168,76,0.35)', background: '#11131A', color: '#F4E3B2' }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* TAB 3: AD BANNERS & K94 SERVICES */}
         {activeTab === 'banners' && (
           <div style={{ display: 'grid', gap: 18 }}>
             {config.banners.map((b, idx) => (

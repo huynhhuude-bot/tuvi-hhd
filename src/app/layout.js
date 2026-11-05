@@ -1,6 +1,7 @@
 import './globals.css';
 import { ThemeProvider } from '../lib/turbopackShim';
 import HhdNavigationDock from '../components/HhdNavigationDock';
+import HhdSideAdLayout from '../components/HhdSideAdLayout';
 
 export const metadata = {
   title: 'HHD · Tử Vi Đẩu Số Chính Tông | Công ty Truyền thông K94 - 0983.339.397',
@@ -35,7 +36,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-screen">
         <ThemeProvider>
-          {children}
+          <HhdSideAdLayout>{children}</HhdSideAdLayout>
           <HhdNavigationDock />
         </ThemeProvider>
       </body>

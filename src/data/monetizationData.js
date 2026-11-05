@@ -57,6 +57,78 @@ export const DEFAULT_MONETIZATION_CONFIG = {
       highlightColor: '#64B5F6'
     }
   ],
+  sidePanels: {
+    left: [
+      {
+        id: 'left-slot-1',
+        badge: '👑 TRUYỀN THÔNG K94',
+        title: 'Thiết Kế Web, Quay Dựng Video & Quảng Cáo Đa Kênh K94 Media',
+        desc: 'Sản xuất TVC, TikTok/Reels, Thiết kế Logo - Biển hiệu chuẩn kích thước Đỏ Lỗ Ban & Chạy Ads trọn gói.',
+        priceTag: 'Ưu đãi Doanh Nghiệp',
+        imageUrl: '',
+        ctaText: '💬 Zalo K94: 0983.339.397',
+        ctaUrl: 'https://zalo.me/0983339397',
+        isRentalSlot: false
+      },
+      {
+        id: 'left-slot-2',
+        badge: '📱 SIM VIP & STK SỐ ĐẸP',
+        title: 'Kho Sim Phong Thủy Bát Cực Linh Số & Mở STK Ngân Hàng Số Đẹp',
+        desc: 'Tra cứu Sim hợp Bát Tự, mở Tài khoản Ngân hàng Số Đẹp (Lộc Phát 68, Thần Tài 79) miễn phí 100% online.',
+        priceTag: 'Hoàn toàn hợp pháp',
+        imageUrl: '',
+        ctaText: '🔥 Chọn Sim & STK Số Đẹp →',
+        ctaUrl: 'https://zalo.me/0983339397',
+        isRentalSlot: false
+      },
+      {
+        id: 'left-slot-3',
+        badge: '📢 CHO THUÊ BANNER TRÁI',
+        title: 'Vị Trí Quảng Cáo Cho Thuê Cánh Trái (240×360px)',
+        desc: 'Hiển thị cố định xuyên suốt 12 tính năng. Phù hợp: Shop Đá Phong Thủy, Trầm Hương, BĐS, Nội Thất, Trang Sức.',
+        priceTag: 'Liên hệ báo giá tháng',
+        imageUrl: '',
+        ctaText: '📞 Đặt Thuê Ngay: 0983.339.397',
+        ctaUrl: 'https://zalo.me/0983339397',
+        isRentalSlot: true
+      }
+    ],
+    right: [
+      {
+        id: 'right-slot-1',
+        badge: '🖼️ ẤN PHẨM PHONG THỦY',
+        title: 'Đặt In Tranh Thư Pháp Ông Đồ, Kim Bài Mạ Vàng & Lịch Tết K94',
+        desc: 'Chuyển chữ Thư Pháp & Kim Bài Hộ Mệnh vừa tạo trên web thành Tranh Lụa đóng khung hoặc Thẻ Kim Loại khắc laser giao tận nhà.',
+        priceTag: 'Quà tặng Cát Tường',
+        imageUrl: '',
+        ctaText: '🎁 Đặt In Ấn Phẩm Zalo K94',
+        ctaUrl: 'https://zalo.me/0983339397',
+        isRentalSlot: false
+      },
+      {
+        id: 'right-slot-2',
+        badge: '🏗️ THIẾT KẾ CHUẨN LỖ BAN',
+        title: 'Tư Vấn Thiết Kế Biển Hiệu Quảng Cáo & Nội Thất Hợp Mệnh Gia Chủ',
+        desc: 'Đo đạc chuẩn 3 Thước Lỗ Ban 52.2cm - 42.9cm - 38.8cm, phối màu bảng hiệu tương sinh Ngũ Hành giúp cửa hàng đại vượng.',
+        priceTag: 'B2B K94 Media',
+        imageUrl: '',
+        ctaText: '📐 Nhận Báo Giá Thiết Kế →',
+        ctaUrl: 'https://zalo.me/0983339397',
+        isRentalSlot: false
+      },
+      {
+        id: 'right-slot-3',
+        badge: '📢 CHO THUÊ BANNER PHẢI',
+        title: 'Vị Trí Quảng Cáo Cho Thuê Cánh Phải (240×360px)',
+        desc: 'Tăng nhận diện thương hiệu tới hàng ngàn khách tra cứu Tử Vi & Phong Thủy mỗi ngày. Miễn phí thiết kế Banner tại K94.',
+        priceTag: 'Vị trí VIP Cánh Phải',
+        imageUrl: '',
+        ctaText: '💬 Liên Hệ Thuê: 0983.339.397',
+        ctaUrl: 'https://zalo.me/0983339397',
+        isRentalSlot: true
+      }
+    ]
+  },
   products: [
     {
       id: 'tram-huong-108',
@@ -189,6 +261,16 @@ export function loadMonetizationConfig() {
       ...parsed,
       donation: { ...DEFAULT_MONETIZATION_CONFIG.donation, ...(parsed.donation || {}) },
       banners: Array.isArray(parsed.banners) && parsed.banners.length > 0 ? parsed.banners : DEFAULT_MONETIZATION_CONFIG.banners,
+      sidePanels: {
+        left:
+          Array.isArray(parsed.sidePanels?.left) && parsed.sidePanels.left.length > 0
+            ? parsed.sidePanels.left
+            : DEFAULT_MONETIZATION_CONFIG.sidePanels.left,
+        right:
+          Array.isArray(parsed.sidePanels?.right) && parsed.sidePanels.right.length > 0
+            ? parsed.sidePanels.right
+            : DEFAULT_MONETIZATION_CONFIG.sidePanels.right
+      },
       products: Array.isArray(parsed.products) && parsed.products.length > 0 ? parsed.products : DEFAULT_MONETIZATION_CONFIG.products
     };
   } catch {
